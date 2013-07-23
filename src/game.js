@@ -28,7 +28,7 @@ Game = {
     var x = 20;
     var y = Game.height/2;
     Game.systems.forEach(function(system) {
-      Crafty.e('2D, Canvas, Color').attr({x: x, y: y, w: 3, h: 3}).color('white');
+      Crafty.e('System').attr({x: x, y: y});
       x += 20;
     });
   }
