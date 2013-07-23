@@ -6,6 +6,11 @@ Crafty.c('System', {
   },
 
   at: function(p) {
-    this.attr({x: 10 + p.distance / Game.max_range * Game.width, y: Game.height / 2})
+    var x0 = Game.width / 2
+    var y0 = Game.height / 2
+    var distance = p.distance * Game.width / (2*Game.max_range);
+    var dx = Math.cos(p.ra) * distance;
+    var dy = Math.sin(p.ra) * distance;
+    this.attr({x: x0 + dx, y: y0 + dy})
   }
 })
