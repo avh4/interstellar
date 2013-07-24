@@ -10,7 +10,7 @@ function colorForSpectralClass(cl) {
     case "L": return '#ff6060'; // red-brown
     case "T": return '#ff4080'; // brown
     case "Y": return '#9366B4'; // dark brown
-    case "D": return '#F0F0F0';
+    case "D": return '#F0F0F0'; // white dwarf
   }
   return "#444444";
 }
@@ -27,7 +27,7 @@ function radiusForSpectralClass(cl) {
     case "L": return 0.5; // estimate
     case "T": return 0.4; // estimate
     case "Y": return 0.3; // estimate
-    case "D": return '#F0F0F0';
+    case "D": return 0.1; // estimate
   }
 }
 
