@@ -1,16 +1,34 @@
 function colorForSpectralClass(cl) {
   switch(cl) {
-    case "A": return '#f8f7ff';
+    case "O": return '#9bb0ff'; // blue
+    case "B": return '#bbccff'; // blue-white
+    case "A": return '#f8f7ff'; // white
+    case "F": return '#fcf4d8'; // yellow-white
+    case "G": return '#fff2a1'; // yellow
+    case "K": return '#ffe46f'; // orange
+    case "M": return '#ffa040'; // red
+    case "L": return '#ff6060'; // red-brown
+    case "T": return '#ff4080'; // brown
+    case "Y": return '#9366B4'; // dark brown
     case "D": return '#F0F0F0';
-    case "F": return '#fcf4d8';
-    case "G": return '#fff2a1';
-    case "K": return '#ffe46f';
-    case "L": return '#ff6060';
-    case "M": return '#ffa040';
-    case "T": return '#ff4080';
-    case "Y": return '#9366B4';
   }
   return "#444444";
+}
+
+function radiusForSpectralClass(cl) {
+  switch(cl) {
+    case "O": return 6.6;
+    case "B": return 1.8;
+    case "A": return 1.4;
+    case "F": return 1.15;
+    case "G": return 0.96;
+    case "K": return 0.7;
+    case "M": return 0.6; // estimate
+    case "L": return 0.5; // estimate
+    case "T": return 0.4; // estimate
+    case "Y": return 0.3; // estimate
+    case "D": return '#F0F0F0';
+  }
 }
 
 function pixelForCoordinate(p) {
@@ -48,7 +66,8 @@ Game = {
 
   width: 800,
   height: 600,
-  max_range: 15
+  max_range: 15,
+  radius_scale: 5
 }
 
 window.onload = function() {
@@ -59,6 +78,7 @@ window.onload = function() {
     Game.systems.forEach(function(system) {
       var px = pixelForCoordinate(system.p);
       var color = colorForSpectralClass(system.cl);
-      paper.circle(px[0], px[1], 3).attr({fill: color, stroke: "none"});
+      var r = Game.radius_scale * radiusForSpectralClass(system.cl);
+      paper.circle(px[0], px[1], r).attr({fill: color, stroke: "none"});
     })
 }
