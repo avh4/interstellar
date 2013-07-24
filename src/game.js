@@ -1,3 +1,27 @@
+function colorForSpectralClass(cl) {
+  switch(cl) {
+    case "A": return '#f8f7ff';
+    case "D": return '#F0F0F0';
+    case "F": return '#fcf4d8';
+    case "G": return '#fff2a1';
+    case "K": return '#ffe46f';
+    case "L": return '#ff6060';
+    case "M": return '#ffa040';
+    case "T": return '#ff4080';
+    case "Y": return '#9366B4';
+  }
+  return "#444444";
+}
+
+function pixelForCoordinate(p) {
+  var x0 = Game.width / 2
+  var y0 = Game.height / 2
+  var distance = p.distance * Game.width / (2*Game.max_range);
+  var dx = Math.cos(p.ra) * distance;
+  var dy = Math.sin(p.ra) * distance;
+  return [x0 + dx, y0 + dy];
+}
+
 function ra(hours, minutes, seconds) {
   return hours * Math.PI / 12;
 }
@@ -24,17 +48,17 @@ Game = {
 
   width: 800,
   height: 600,
-  max_range: 12,
+  max_range: 15
+}
 
-  start: function() {
-    Crafty.init(Game.width, Game.height);
-    Crafty.background('black');
+window.onload = function() {
+    var paper = new Raphael(document.getElementById('canvas_container'),
+      Game.width, Game.height);
+    paper.rect(0, 0, Game.width, Game.height).attr({fill: "black"});
 
-    var x = 20;
-    var y = Game.height/2;
     Game.systems.forEach(function(system) {
-      Crafty.e('System').from(system);
-      x += 20;
-    });
-  }
+      var px = pixelForCoordinate(system.p);
+      var color = colorForSpectralClass(system.cl);
+      paper.circle(px[0], px[1], 3).attr({fill: color, stroke: "none"});
+    })
 }
