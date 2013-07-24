@@ -79,6 +79,7 @@ window.onload = function() {
       var px = pixelForCoordinate(system.p);
       var color = colorForSpectralClass(system.cl);
       var r = Game.radius_scale * radiusForSpectralClass(system.cl);
-      paper.circle(px[0], px[1], r).attr({fill: color, stroke: "none"});
+      paper.circle(px[0], px[1], r).attr({fill: color, stroke: "none"})
+        .glow({color: color, width: 100});
     })
 }
