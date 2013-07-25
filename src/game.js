@@ -24,31 +24,30 @@ function(CoordinateSystem, System, Coordinate, Player) {
     this.years = 0;
   }
 
-  Game.prototype.start = function(paper) {
-    var width = paper.width;
-    var height = paper.height;
-    this.paper = paper;
+  Game.prototype.start = function(layer) {
+    var width = layer.width;
+    var height = layer.height;
     this.coordinateSystem = new CoordinateSystem(width, height, 15);
     var c = this.coordinateSystem;
     var player = this.player;
 
-    paper.rect(0, 0, width, height).attr({fill: "black"});
-    this.timeLabel = paper.text(200, height - 20, "0 million years").attr({fill: "white"});
-    this.ownedSystemsLabel = paper.text(200, height - 40, "").attr({fill: "white"});
-    this.consumedEnergyLabel = paper.text(200, height - 60, "").attr({fill: "white"});
+    layer.add(new Kinetic.Rect({x: 0, y: 0, width: width, height: height, fill: "black"}));
+    this.timeLabel = new Kinetic.Text({x: 20, y: height - 20, fill: "white"});
+    layer.add(this.timeLabel);
+    this.ownedSystemsLabel = new Kinetic.Text({x: 20, y: height - 40, fill: "white"});
+    layer.add(this.ownedSystemsLabel);
+    this.consumedEnergyLabel = new Kinetic.Text({x: 20, y: height-60, fill: "white"});
+    layer.add(this.consumedEnergyLabel);
     this.systems.forEach(function(system) {
       var x = c.x(system);
       var y = c.y(system);
       var color = system.color;
       var r = c.radius(system.radius);
-      var circ = paper.circle(x, y, r);
-      circ.attr({fill: color, stroke: "none"});
-      circ.click(function() { player.toggleOwnership(system) });
-      system.e = paper.set();
-      system.e.push(circ, circ.glow({color: color, width: 100}));
+      var circ = new Kinetic.Circle({x: x, y: y, radius: r, fill: color});
+      layer.add(circ);
+      circ.on("click", function() { player.toggleOwnership(system) });
+      system.e = circ;
     });
-
-    paper.print(100, 100, "Test string", paper.getFont("Helvetica", 800), 30).attr({fill: "white"});
   }
 
   Game.prototype.update = function() {
@@ -58,20 +57,20 @@ function(CoordinateSystem, System, Coordinate, Player) {
     var as = 0.000277777778 / 180 * Math.PI;
     var step = .01;
     this.years = Math.round(100*(this.years + step)) / 100;
-    this.timeLabel.attr({text: this.years + " million years"});
+    this.timeLabel.setText(this.years + " million years");
     this.systems.forEach(function(system) {
       system.coordinate.ra += system.rad * as * step;
-      system.e.attr({cx: c.x(system), cy: c.y(system)});
+      system.e.setPosition(c.x(system), c.y(system));
     });
 
-    var ownedSystems = _.map(this.player.ownedSystems, function(s) { 
+    var ownedSystems = _.map(this.player.ownedSystems, function(s) {
       var e = Math.round(100 * s.energy) / 100;
-      return s.name + "(" + e + ")" 
+      return s.name + "(" + e + ")"
       });
-    this.ownedSystemsLabel.attr({text: ownedSystems.join(", ")});
+    this.ownedSystemsLabel.setText(ownedSystems.join(", "));
 
     var consumed = Math.round(1000 * this.player.consumed) / 1000;
-    this.consumedEnergyLabel.attr({text: consumed + " x 10^30 TJ"})
+    this.consumedEnergyLabel.setText(consumed + " x 10^30 TJ")
   };
 
   return Game;

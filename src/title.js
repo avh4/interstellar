@@ -1,31 +1,51 @@
 define([], function() {
   function Title() {
-
   }
 
-  Title.prototype.start = function(paper, container) {
-    var width = paper.width;
-    var height = paper.height;
-    var bg = paper.image("PIA17171.jpg", 0, 0, width, width / 838 * 958);
-    bg.attr({"clip-rect": "0 0 800 600", transform: "t0,-160"});
+  Title.prototype.start = function(layer, container) {
+    var width = layer.width;
+    var height = layer.height;
 
-    var t = paper.text(40, 500, "Interstellar").attr({fill: "white", font: "50px serif", "text-anchor": "start"});
-
-    var button = paper.rect(500, 475, 200, 50, 15)
-      .attr({fill: "#7f7f7f", "fill-opacity": .5, "stroke-width": 3});
-
-    paper.text(button.attrs.x + button.attrs.width/2,
-      button.attrs.y + button.attrs.height/2, "Start").attr({font: "30px serif"});
-
-    button.node.onmouseover = function () {
-      button.attr({fill: "white", "fill-opacity": 1});
-    };
-    button.node.onmouseout = function () {
-      button.attr({fill: "#7f7f7f", "fill-opacity": .5});
-    };
-    button.node.onclick = function() {
-      container.switchTo("game");
+    var bg = new Image();
+    var i = new Kinetic.Image({x: 0, y: -160, width: 800, height: 800 / 838 * 958});
+    layer.add(i);
+    bg.onload = function() {
+      i.setImage(bg);
+      layer.draw();
     }
+    bg.src = "PIA17171.jpg";
+
+    var t = new Kinetic.Text({
+      x: 40, y: 465, text: "Interstellar", fontSize: 50, fontFamily: "serif", fill: "white"
+    });
+    layer.add(t);
+
+    var button = new Kinetic.Group({x: 500, y: 475});
+    var rDraw = new Kinetic.Rect({x: 0, y: 0, width: 200, height: 50, cornerRadius: 15,
+      fill: "#7f7f7f", stroke: "black", strokeWidth: 3, opacity: 0.5});
+    button.add(rDraw);
+    button.add(new Kinetic.Text({text: "Start", fontSize: 30, fontFamily: "serif", fill: "black",
+      x: 0, y: 8, width: 200, height: 50, align: "center"}));
+    layer.add(button);
+
+    button.on("mouseover", function() {
+      rDraw.setOpacity(1);
+      rDraw.setFill("white");
+      button.draw();
+    });
+
+    button.on("mouseout", function() {
+      rDraw.setOpacity(.5);
+      rDraw.setFill("#7f7f7f");
+      button.draw();
+    });
+
+    button.on("click", function() {
+      container.switchTo("game");
+    });
+  }
+
+  Title.prototype.update = function() {
   }
 
   return Title;
