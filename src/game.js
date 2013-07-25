@@ -1,11 +1,7 @@
 define(['coordinate_system', 'system', 'coordinate', 'player'],
 function(CoordinateSystem, System, Coordinate, Player) {
-  function Game(paper) {
-    var width = paper.width;
-    var height = paper.height;
-    this.paper = paper;
+  function Game() {
     this.player = new Player();
-    this.coordinateSystem = new CoordinateSystem(width, height, 15);
     this.systems = [
       new System("Solar System",    "G", new Coordinate([ 0,  0,  0], 0,  0     ),     0, 1    , 8),
       new System("Alpha Centauri",  "G", new Coordinate([14, 29, 43], 0,  4.2421), -3678, 2.130, 1),
@@ -24,18 +20,24 @@ function(CoordinateSystem, System, Coordinate, Player) {
       new System("WISE 0350-5658",  "Y", new Coordinate([ 3, 50,  0], 0, 11.208 ),  -125, 0    , 0),
       new System("EZ Aquarii",      "M", new Coordinate([22, 38, 33], 0, 11.266 ),  2314, 0.32 , 0),
     ];
+    this.player.toggleOwnership(this.systems[0]);
+    this.years = 0;
+  }
+
+  Game.prototype.start = function(paper) {
+    var width = paper.width;
+    var height = paper.height;
+    this.paper = paper;
+    this.coordinateSystem = new CoordinateSystem(width, height, 15);
+    var c = this.coordinateSystem;
+    var player = this.player;
+
+    paper.clear();
+
     paper.rect(0, 0, width, height).attr({fill: "black"});
     this.timeLabel = paper.text(200, height - 20, "0 million years").attr({fill: "white"});
     this.ownedSystemsLabel = paper.text(200, height - 40, "").attr({fill: "white"});
     this.consumedEnergyLabel = paper.text(200, height - 60, "").attr({fill: "white"});
-    this.player.toggleOwnership(this.systems[0]);
-    this.years = 0;
-    this.draw(paper);
-  }
-
-  Game.prototype.draw = function(paper) {
-    var c = this.coordinateSystem;
-    var player = this.player;
     this.systems.forEach(function(system) {
       var x = c.x(system);
       var y = c.y(system);
@@ -47,13 +49,13 @@ function(CoordinateSystem, System, Coordinate, Player) {
       system.e = paper.set();
       system.e.push(circ, circ.glow({color: color, width: 100}));
     });
-    
+
     paper.print(100, 100, "Test string", paper.getFont("Helvetica", 800), 30).attr({fill: "white"});
   }
 
   Game.prototype.update = function() {
     this.player.update();
-    
+
     var c = this.coordinateSystem;
     var as = 0.000277777778 / 180 * Math.PI;
     var step = .01;
@@ -63,16 +65,16 @@ function(CoordinateSystem, System, Coordinate, Player) {
       system.coordinate.ra += system.rad * as * step;
       system.e.attr({cx: c.x(system), cy: c.y(system)});
     });
-    
+
     var ownedSystems = _.map(this.player.ownedSystems, function(s) { 
       var e = Math.round(100 * s.energy) / 100;
       return s.name + "(" + e + ")" 
       });
     this.ownedSystemsLabel.attr({text: ownedSystems.join(", ")});
-    
+
     var consumed = Math.round(1000 * this.player.consumed) / 1000;
     this.consumedEnergyLabel.attr({text: consumed + " x 10^30 TJ"})
   };
-  
+
   return Game;
 });
