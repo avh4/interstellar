@@ -33,6 +33,11 @@ var server = app.listen(app.get('port'), function(){
 });
 var io = socketio.listen(server);
 
+io.configure(function () {
+  io.set("transports", ["xhr-polling"]);
+  io.set("polling duration", 10);
+});
+
 io.sockets.on('connection', function (socket) {
   socket.emit('news', { hello: 'world' });
   socket.on('my other event', function (data) {
