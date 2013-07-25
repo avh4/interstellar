@@ -32,8 +32,6 @@ function(CoordinateSystem, System, Coordinate, Player) {
     var c = this.coordinateSystem;
     var player = this.player;
 
-    paper.clear();
-
     paper.rect(0, 0, width, height).attr({fill: "black"});
     this.timeLabel = paper.text(200, height - 20, "0 million years").attr({fill: "white"});
     this.ownedSystemsLabel = paper.text(200, height - 40, "").attr({fill: "white"});
