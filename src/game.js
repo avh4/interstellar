@@ -20,7 +20,6 @@ function(CoordinateSystem, System, Coordinate, Player) {
       new System("WISE 0350-5658",  "Y", new Coordinate([ 3, 50,  0], 0, 11.208 ),  -125, 0    , 0),
       new System("EZ Aquarii",      "M", new Coordinate([22, 38, 33], 0, 11.266 ),  2314, 0.32 , 0),
     ];
-    this.player.toggleOwnership(this.systems[0]);
     this.years = 0;
   }
 
@@ -52,6 +51,8 @@ function(CoordinateSystem, System, Coordinate, Player) {
       layer.add(group);
       system.e = group;
     });
+
+    this.player.toggleOwnership(this.systems[0]);
   }
 
   Game.prototype.update = function() {
