@@ -10,6 +10,7 @@ define(["stellar_class"], function(StellarClass) {
     this.radius = cl.radius();
     this.rad = ra_motion_mas_yr;
     this.energy = 0.1 * mass * M * 650; // TJoules * 10^30   (E = 65 TJ / kg)
+    this.planets = planets;
   };
 
   System.prototype.rate = function() {
