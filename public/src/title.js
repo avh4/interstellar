@@ -1,5 +1,6 @@
 define([], function() {
-  function Title() {
+  function Title(gameManager) {
+    this.gameManager = gameManager;
   }
 
   Title.prototype.start = function(layer, container) {
@@ -40,8 +41,12 @@ define([], function() {
       button.draw();
     });
 
+    var gm = this.gameManager;
     button.on("click", function() {
-      container.switchTo("game");
+      container.switchTo("waiting_for_players");
+      gm.joinGame(function() {
+        container.switchTo("game");
+      });
     });
   }
 

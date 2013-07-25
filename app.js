@@ -41,15 +41,28 @@ io.configure(function () {
   io.set("polling duration", 10);
 });
 
+var sockets = {};
+
 var games = {};
 var openGames = [];
 var activeGames = [];
+
+function startGame(game) {
+  openGames = _.without(openGames, game);
+  activeGames.push(game);
+
+  console.log("Starting game " + game.uid);
+  sockets[game.p1].emit('start', game.uid);
+  sockets[game.p2].emit('start', game.uid);
+  sockets[game.p3].emit('start', game.uid);
+}
 
 function joinGame(userId) {
   if (openGames.length == 0) {
     var uid = uuid.v1();
     var game = { uid: uid };
     console.log("Created game: " + game.uid);
+    games[uid] = game;
     openGames.push(game);
   }
   var game = openGames[0];
@@ -60,8 +73,6 @@ function joinGame(userId) {
     role = "p2";
   } else {
     role = "p3";
-    openGames = _.without(openGames, game);
-    activeGames.push(game);
   }
   game[role] = userId;
   console.log("Player " + userId + " joined " + game.uid + " as " + role);
@@ -70,8 +81,12 @@ function joinGame(userId) {
 
 io.sockets.on('connection', function (socket) {
   var userId = uuid.v1();
+  sockets[userId] = socket;
   var joinInfo = joinGame(userId);
   socket.emit('joined', joinInfo);
+  if (games[joinInfo.game].p3) {
+    startGame(games[joinInfo.game]);
+  }
   socket.on('my other event', function (data) {
     console.log("got data from " + userId + ":" + data);
   });

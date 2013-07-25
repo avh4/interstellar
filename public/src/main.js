@@ -1,6 +1,8 @@
-require(["domReady", "game", "title"], function(domReady, Game, Title) {
+require(["domReady", "game", "title", "waiting_for_players", "game_manager"],
+function(domReady, Game, Title, WaitingForPlayers, GameManager) {
+  var gm = new GameManager();
   var game = new Game();
-  var title = new Title();
+  var title = new Title(gm);
   var stage;
   var anim;
 
@@ -16,6 +18,7 @@ require(["domReady", "game", "title"], function(domReady, Game, Title) {
     switch(screen) {
       case "game": current = game; break;
       case "title": current = title; break;
+      case "waiting_for_players": current = new WaitingForPlayers(); break;
     }
     current.start(layer, container);
     stage.add(layer);
@@ -30,12 +33,5 @@ require(["domReady", "game", "title"], function(domReady, Game, Title) {
   domReady(function() {
     stage = new Kinetic.Stage({container: 'container', width: 800, height: 600});
     container.switchTo("title");
-
-    var socket = io.connect('/');
-      socket.on('joined', function (data) {
-        console.log("joined game");
-        console.log(data);
-        socket.emit('my other event', { my: 'data' });
-      });
   });
 });
