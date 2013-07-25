@@ -43,6 +43,7 @@ io.configure(function () {
 
 var games = {};
 var openGames = [];
+var activeGames = [];
 
 function joinGame(userId) {
   if (openGames.length == 0) {
@@ -52,10 +53,19 @@ function joinGame(userId) {
     openGames.push(game);
   }
   var game = openGames[0];
-  var p = "p1";
-  game[p] = userId;
-  console.log("Player " + userId + " joined " + game.uid + " as " + p);
-  return { game: game.uid, role: p};
+  var role;
+  if (!game.p1) {
+    role = "p1";
+  } else if (!game.p2) {
+    role = "p2";
+  } else {
+    role = "p3";
+    openGames = _.without(openGames, game);
+    activeGames.push(game);
+  }
+  game[role] = userId;
+  console.log("Player " + userId + " joined " + game.uid + " as " + role);
+  return { game: game.uid, role: role};
 }
 
 io.sockets.on('connection', function (socket) {
