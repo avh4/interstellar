@@ -3,12 +3,14 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
-  , http = require('http')
-  , path = require('path')
-  , socketio = require('socket.io');
+var _ = require('underscore');
+var express = require('express');
+var routes = require('./routes');
+var user = require('./routes/user');
+var http = require('http');
+var path = require('path');
+var socketio = require('socket.io');
+var uuid = require('node-uuid');
 
 var app = express();
 
@@ -35,12 +37,32 @@ var io = socketio.listen(server);
 
 io.configure(function () {
   io.set("transports", ["xhr-polling"]);
+  io.set("log level", 2);
   io.set("polling duration", 10);
 });
 
+var games = {};
+var openGames = [];
+
+function joinGame(userId) {
+  if (openGames.length == 0) {
+    var uid = uuid.v1();
+    var game = { uid: uid };
+    console.log("Created game: " + game.uid);
+    openGames.push(game);
+  }
+  var game = openGames[0];
+  var p = "p1";
+  game[p] = userId;
+  console.log("Player " + userId + " joined " + game.uid + " as " + p);
+  return { game: game.uid, role: p};
+}
+
 io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
+  var userId = uuid.v1();
+  var joinInfo = joinGame(userId);
+  socket.emit('joined', joinInfo);
   socket.on('my other event', function (data) {
-    console.log(data);
+    console.log("got data from " + userId + ":" + data);
   });
 });
