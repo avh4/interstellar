@@ -1,5 +1,6 @@
 require(["domReady", "game"], function(domReady, Game) {
   domReady(function() {
-    Game.start();
+    var game = new Game('canvas_container', 800, 600);
+    setInterval(function() { game.update(); }, 35);
   });
 });
