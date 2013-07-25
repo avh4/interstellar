@@ -1,9 +1,11 @@
 define(['coordinate_system', 'system', 'coordinate', 'player'],
 function(CoordinateSystem, System, Coordinate, Player) {
-  function Game(containerId, width, height) {
+  function Game(paper) {
+    var width = paper.width;
+    var height = paper.height;
+    this.paper = paper;
     this.player = new Player();
     this.coordinateSystem = new CoordinateSystem(width, height, 15);
-    this.paper = new Raphael(document.getElementById(containerId), width, height)
     this.systems = [
       new System("Solar System",    "G", new Coordinate([ 0,  0,  0], 0,  0     ),     0, 1    , 8),
       new System("Alpha Centauri",  "G", new Coordinate([14, 29, 43], 0,  4.2421), -3678, 2.130, 1),
@@ -22,13 +24,13 @@ function(CoordinateSystem, System, Coordinate, Player) {
       new System("WISE 0350-5658",  "Y", new Coordinate([ 3, 50,  0], 0, 11.208 ),  -125, 0    , 0),
       new System("EZ Aquarii",      "M", new Coordinate([22, 38, 33], 0, 11.266 ),  2314, 0.32 , 0),
     ];
-    this.paper.rect(0, 0, width, height).attr({fill: "black"});
-    this.timeLabel = this.paper.text(200, height - 20, "0 million years").attr({fill: "white"});
-    this.ownedSystemsLabel = this.paper.text(200, height - 40, "").attr({fill: "white"});
-    this.consumedEnergyLabel = this.paper.text(200, height - 60, "").attr({fill: "white"});
+    paper.rect(0, 0, width, height).attr({fill: "black"});
+    this.timeLabel = paper.text(200, height - 20, "0 million years").attr({fill: "white"});
+    this.ownedSystemsLabel = paper.text(200, height - 40, "").attr({fill: "white"});
+    this.consumedEnergyLabel = paper.text(200, height - 60, "").attr({fill: "white"});
     this.player.toggleOwnership(this.systems[0]);
     this.years = 0;
-    this.draw(this.paper);
+    this.draw(paper);
   }
 
   Game.prototype.draw = function(paper) {
