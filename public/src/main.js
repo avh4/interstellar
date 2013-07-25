@@ -31,7 +31,7 @@ require(["domReady", "game", "title"], function(domReady, Game, Title) {
     stage = new Kinetic.Stage({container: 'container', width: 800, height: 600});
     container.switchTo("title");
 
-    var socket = io.connect('http://localhost');
+    var socket = io.connect('/');
       socket.on('news', function (data) {
         console.log(data);
         socket.emit('my other event', { my: 'data' });
