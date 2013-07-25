@@ -1,6 +1,6 @@
 var connect = require('connect');
 var config = require('./protected/config');
-var Chilly = require('./framework/chilly-0.2');
+var Chilly = require('./framework/chilly-0.2.1');
 
 /**
  * Creates the server
