@@ -18,6 +18,7 @@ define([], function() {
       callback();
     });
     socket.on('update', function(data) {
+      game.years = data.Myears;
       game.update();
       stage.draw();
     });

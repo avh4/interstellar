@@ -62,6 +62,9 @@ io.configure(function () {
   io.set("polling duration", 10);
 });
 
+
+var Game = require('./src/game');
+
 var sockets = {};
 
 var games = {};
@@ -69,7 +72,9 @@ var openGames = [];
 var activeGames = [];
 
 function stepGame(game) {
-  sockets[game.p1].emit('update', game.uid);
+  game.step(0.01);
+
+  sockets[game.p1].emit('update', game);
   // sockets[game.p2].emit('update', game.uid);
   // sockets[game.p3].emit('update', game.uid);
 }
@@ -120,10 +125,9 @@ jobs.process('start game', function(job, done) {
 
 function joinGame(userId) {
   if (openGames.length == 0) {
-    var uid = uuid.v1();
-    var game = { uid: uid };
+    var game = new Game();
     console.log("Created game: " + game.uid);
-    games[uid] = game;
+    games[game.uid] = game;
     openGames.push(game);
   }
   var game = openGames[0];
