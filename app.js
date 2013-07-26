@@ -62,7 +62,39 @@ var games = {};
 var openGames = [];
 var activeGames = [];
 
-jobs.promote();
+function stepGame(game) {
+  sockets[game.p1].emit('update', game.uid);
+  // sockets[game.p2].emit('update', game.uid);
+  // sockets[game.p3].emit('update', game.uid);
+}
+
+var isRunning = false;
+var steps = 0;
+var startTime;
+function startStepLoop() {
+  if (isRunning) return;
+  console.log("Starting the step loop.");
+  isRunning = true;
+  steps = 0;
+  startTime = new Date().getTime();
+  setTimeout(step, 35);
+}
+function step() {
+  activeGames.forEach(stepGame);
+  if (activeGames.length > 0) {
+    setTimeout(step, 35);
+  } else {
+    console.log("No active games, stopping the step loop.");
+    isRunning = false;
+  }
+
+  steps++;
+  if (steps % 100 == 0) {
+    var ms = new Date().getTime() - startTime;
+    console.log("Running " + activeGames.length + " games, FPS: " + (steps * 1000/ ms));
+  }
+}
+
 
 jobs.process('start game', function(job, done) {
   var game = games[job.data.game];
@@ -72,31 +104,13 @@ jobs.process('start game', function(job, done) {
 
   console.log("Starting game " + game.uid);
   sockets[game.p1].emit('start', game.uid);
-  sockets[game.p2].emit('start', game.uid);
-  sockets[game.p3].emit('start', game.uid);
+  // sockets[game.p2].emit('start', game.uid);
+  // sockets[game.p3].emit('start', game.uid);
+
+  startStepLoop();
 
   done();
 });
-
-function stepGame(game) {
-  sockets[game.p1].emit('update', game.uid);
-  sockets[game.p2].emit('update', game.uid);
-  sockets[game.p3].emit('update', game.uid);
-}
-
-var steps = 0;
-var startTime = new Date().getTime();
-function step() {
-  activeGames.forEach(stepGame);
-  setTimeout(step, 35);
-
-  steps++;
-  if (steps % 100 == 0) {
-    var ms = new Date().getTime() - startTime;
-    console.log("Running " + activeGames.length + " games, FPS: " + (steps * 1000/ ms));
-  }
-}
-setTimeout(step, 35);
 
 function joinGame(userId) {
   if (openGames.length == 0) {
@@ -120,13 +134,24 @@ function joinGame(userId) {
   return { game: game.uid, role: role};
 }
 
+function terminateGame(game) {
+  console.log("Terminating game " + game.uid);
+  activeGames = _.without(activeGames, game);
+}
+
+function playerDisconnected(userId) {
+  console.log("Player disconnected " + userId);
+  var game = _.find(activeGames, function(game) { return game.p1 == userId; });
+  terminateGame(game);
+}
+
 io.sockets.on('connection', function (socket) {
   var userId = uuid.v1();
   sockets[userId] = socket;
   var joinInfo = joinGame(userId);
   socket.emit('joined', joinInfo);
   var game = games[joinInfo.game];
-  if (game.p3) {
+  if (game.p1) {
     jobs.create('start game', {
         title: 'start game ' + game.uid
       , game: game.uid
@@ -134,5 +159,8 @@ io.sockets.on('connection', function (socket) {
   }
   socket.on('my other event', function (data) {
     console.log("got data from " + userId + ":" + data);
+  });
+  socket.on('disconnect', function() {
+    playerDisconnected(userId);
   });
 });
