@@ -48,7 +48,7 @@ var server = app.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 var io = socketio.listen(server);
-kue.app.listen(3001);
+app.use('/kue', kue.app);
 
 io.configure(function () {
   io.set("transports", ["xhr-polling"]);
