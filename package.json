@@ -12,6 +12,11 @@
   "dependencies": {
     "express": "3.3.x",
     "underscore": "1.5.x",
-    "socket.io": "0.9.x"
+    "node-uuid": "1.4.x",
+    "socket.io": "0.9.x",
+    "redis": "0.8.4",
+    "hiredis": "0.1.15",
+    "kue": "0.6.x",
+    "nodetime": "0.8.x"
   }
 }
