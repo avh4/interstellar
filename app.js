@@ -11,8 +11,10 @@ var http = require('http');
 var path = require('path');
 var socketio = require('socket.io');
 var uuid = require('node-uuid');
+var kue = require('kue');
 
 var app = express();
+var jobs = kue.createQueue();
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -34,6 +36,7 @@ var server = app.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 var io = socketio.listen(server);
+kue.app.listen(3001);
 
 io.configure(function () {
   io.set("transports", ["xhr-polling"]);
@@ -47,7 +50,10 @@ var games = {};
 var openGames = [];
 var activeGames = [];
 
-function startGame(game) {
+
+jobs.process('start game', function(job, done){
+  var game = games[job.data.game];
+
   openGames = _.without(openGames, game);
   activeGames.push(game);
 
@@ -55,7 +61,9 @@ function startGame(game) {
   sockets[game.p1].emit('start', game.uid);
   sockets[game.p2].emit('start', game.uid);
   sockets[game.p3].emit('start', game.uid);
-}
+
+  done();
+});
 
 function joinGame(userId) {
   if (openGames.length == 0) {
@@ -84,8 +92,12 @@ io.sockets.on('connection', function (socket) {
   sockets[userId] = socket;
   var joinInfo = joinGame(userId);
   socket.emit('joined', joinInfo);
-  if (games[joinInfo.game].p3) {
-    startGame(games[joinInfo.game]);
+  var game = games[joinInfo.game];
+  if (game.p3) {
+    jobs.create('start game', {
+        title: 'start game ' + game.uid
+      , game: game.uid
+    }).save();
   }
   socket.on('my other event', function (data) {
     console.log("got data from " + userId + ":" + data);
