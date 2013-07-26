@@ -1,5 +1,10 @@
 define([], function() {
-  function GameManager() {
+  var game;
+  var stage;
+
+  function GameManager(_game, _stage) {
+    game = _game;
+    stage = _stage;
   }
 
   GameManager.prototype.joinGame = function(callback) {
@@ -11,7 +16,11 @@ define([], function() {
     });
     socket.on('start', function(data) {
       callback();
-    })
+    });
+    socket.on('update', function(data) {
+      game.update();
+      stage.draw();
+    });
   }
 
   return GameManager;

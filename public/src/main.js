@@ -1,8 +1,8 @@
 require(["domReady", "game", "title", "waiting_for_players", "game_manager"],
 function(domReady, Game, Title, WaitingForPlayers, GameManager) {
-  var gm = new GameManager();
   var game = new Game();
-  var title = new Title(gm);
+  var gm;
+  var title;
   var stage;
   var anim;
 
@@ -22,16 +22,12 @@ function(domReady, Game, Title, WaitingForPlayers, GameManager) {
     }
     current.start(layer, container);
     stage.add(layer);
-    current.update();
-    anim = new Kinetic.Animation(function(frame) {
-      current.update();
-      stage.draw();
-    }, layer);
-    anim.start();
   }
 
   domReady(function() {
     stage = new Kinetic.Stage({container: 'container', width: 800, height: 600});
+    gm = new GameManager(game, stage);
+    title = new Title(gm);
     container.switchTo("title");
   });
 });

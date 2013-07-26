@@ -62,8 +62,9 @@ var games = {};
 var openGames = [];
 var activeGames = [];
 
+jobs.promote();
 
-jobs.process('start game', function(job, done){
+jobs.process('start game', function(job, done) {
   var game = games[job.data.game];
 
   openGames = _.without(openGames, game);
@@ -76,6 +77,26 @@ jobs.process('start game', function(job, done){
 
   done();
 });
+
+function stepGame(game) {
+  sockets[game.p1].emit('update', game.uid);
+  sockets[game.p2].emit('update', game.uid);
+  sockets[game.p3].emit('update', game.uid);
+}
+
+var steps = 0;
+var startTime = new Date().getTime();
+function step() {
+  activeGames.forEach(stepGame);
+  setTimeout(step, 35);
+
+  steps++;
+  if (steps % 100 == 0) {
+    var ms = new Date().getTime() - startTime;
+    console.log("Running " + activeGames.length + " games, FPS: " + (steps * 1000/ ms));
+  }
+}
+setTimeout(step, 35);
 
 function joinGame(userId) {
   if (openGames.length == 0) {
