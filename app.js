@@ -13,6 +13,18 @@ var socketio = require('socket.io');
 var uuid = require('node-uuid');
 var kue = require('kue');
 
+function createRedis() {
+  if (process.env.REDISCLOUD_URL) {
+    var rtg   = require("url").parse(process.env.REDISCLOUD_URL);
+    var redis = require("redis").createClient(rtg.port, rtg.hostname);
+    redis.auth(rtg.auth.split(":")[1]);
+    return redis;
+  } else {
+    return require("redis").createClient();
+  }
+}
+kue.redis.createClient = createRedis;
+
 var app = express();
 var jobs = kue.createQueue();
 
