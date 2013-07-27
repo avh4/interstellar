@@ -12,12 +12,19 @@ define([], function() {
     socket.on('joined', function (data) {
       console.log("joined game");
       console.log(data);
-      socket.emit('my other event', { my: 'data' });
     });
     socket.on('start', function(data) {
       game.model = data;
       callback();
     });
+
+    var actions = {
+      stellarMining: function(system) {
+        console.log("Sending player action: p1: stellarMining: " + system.name);
+        socket.emit('action', { player: 'p1', action: 'stellarMining', system: system.name });
+      }
+    };
+
     var debugCount = 0;
     socket.on('update', function(data) {
       debugCount++;
@@ -25,7 +32,7 @@ define([], function() {
         console.log(data);
       }
       game.model = data;
-      game.update();
+      game.update(actions);
       stage.draw();
     });
   }

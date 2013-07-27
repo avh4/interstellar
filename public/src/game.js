@@ -1,5 +1,5 @@
-define(['coordinate_system', 'player', 'number_formatter'],
-function(CoordinateSystem, Player, NumberFormatter) {
+define(['coordinate_system', 'player', 'number_formatter', 'ui/action_button'],
+function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
   function Game() {
     this.groups = {};
   }
@@ -35,6 +35,7 @@ function(CoordinateSystem, Player, NumberFormatter) {
       }
       group.add(group.label = new Kinetic.Text({x: -40, y: 40, width: 80, fill: "grey", align: "center"}));
       group.add(group.label2 = new Kinetic.Text({x: -40, y: 55, width: 80, fill: "grey", align: "center"}));
+      group.add(group.buttons = new Kinetic.Group());
       layer.add(group);
       th.groups[system.name] = group;
     });
@@ -42,7 +43,7 @@ function(CoordinateSystem, Player, NumberFormatter) {
     // this.player.toggleOwnership(this.systems[0]);
   }
 
-  Game.prototype.update = function() {
+  Game.prototype.update = function(actions) {
     // this.player.update();
     var th = this;
 
@@ -56,6 +57,16 @@ function(CoordinateSystem, Player, NumberFormatter) {
     //   system.e.setPosition(c.x(system), c.y(system));
       th.groups[system.name].label.setText(NumberFormatter.format(system.mass_g_e33, 33, 5, "g"));
       th.groups[system.name].label2.setText(NumberFormatter.format(system.output_W_e26, 26, 3, "W"));
+
+      if (system.name == "Solar System") {
+        th.groups[system.name].buttons.removeChildren();
+        var stellarMiningButton = new ActionButton("Stellar Mining", {x: 40, y: -20});
+        th.groups[system.name].buttons.add(stellarMiningButton);
+
+        stellarMiningButton.on("click", function() {
+          actions.stellarMining(system);
+        });
+      }
     });
 
     // var ownedSystems = _.map(this.player.ownedSystems, function(s) {

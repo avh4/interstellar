@@ -173,8 +173,9 @@ io.sockets.on('connection', function (socket) {
       , game: game.uid
     }).save();
   }
-  socket.on('my other event', function (data) {
-    console.log("got data from " + user.uid + ":" + data);
+  socket.on('action', function (data) {
+    console.log("got action from " + user.uid);
+    console.log(data);
   });
   socket.on('disconnect', function() {
     playerDisconnected(user);
