@@ -19,6 +19,8 @@ function(CoordinateSystem, Player, NumberFormatter) {
     layer.add(this.consumedEnergyLabel);
     this.currentCaptureLabel = new Kinetic.Text({x: 20, y: height-80, fill: "white"});
     layer.add(this.currentCaptureLabel);
+    this.label5 = new Kinetic.Text({x: 20, y: height-100, fill: "white"});
+    layer.add(this.label5);
     var th = this;
     this.model.systems.forEach(function(system) {
       var x = c.x(system);
@@ -64,6 +66,8 @@ function(CoordinateSystem, Player, NumberFormatter) {
 
     this.consumedEnergyLabel.setText("Your civilization has expended " + NumberFormatter.format(this.model.p1.harnessedEnergy_J_e41, 41, 3, "J") + " in its entire history");
     this.currentCaptureLabel.setText("Your civilzation is currently making use of " + NumberFormatter.format(this.model.p1.currentCapture_W_e26, 26, 5, "W"));
+    var K = ((Math.log(this.model.p1.currentCapture_W_e26)/Math.log(10) + 26) - 6) / 10;
+    this.label5.setText("K = " + K.toFixed(3));
   };
 
   return Game;
