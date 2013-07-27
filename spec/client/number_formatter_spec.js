@@ -64,4 +64,9 @@ describe('NumberFormatter', function() {
     expect(NumberFormatter.format(5.4, 1, 2, "g")).toBe("54 g");
     expect(NumberFormatter.format(5.4, 1, 1, "g")).toBe("50 g");
   });
+
+  it('should normalize exponent for odd exponents', function() {
+    expect(NumberFormatter.format(77.13471, 26, 3, "W")).toBe("7.71 kYW");
+    expect(NumberFormatter.format(0.001947, 26, 3, "W")).toBe("195 ZW");
+  })
 });

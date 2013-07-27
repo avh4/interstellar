@@ -25,16 +25,17 @@
 
   NumberFormatter.format = function(value, e, sf, unit) {
     var v = value;
+    v = v * Math.pow(10, (e % 3));
+    e -= (e % 3);
     while (v < 1) {
-      v *= 10;
-      e -= 1;
+      v *= 1000;
+      e -= 3;
     }
     while (v >= 1000) {
       v /= 1000;
       e += 3;
     }
-    var v = v * Math.pow(10, (e % 3));
-    var prefix = getPrefix(Math.floor(e / 3) * 3);
+    var prefix = getPrefix(e);
     var decimals = sf - 1;
     if (v >= 10) decimals--;
     if (v >= 100) decimals--;

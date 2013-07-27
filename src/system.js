@@ -62,6 +62,7 @@ module.exports.prototype.step = function(Δtime_years_e9) {
   var radiated_g_e29 = radiated_J_e41 / 89.9;
   var th = this;
   this.mass_g_e33 -= radiated_g_e29 / 10000;
+  this.output_W_e26 = luminosity_W_e26;
   this._listeners.forEach(function(l) {
     l.systemRadiatedEnergy(th.name, luminosity_W_e26, Δtime_seconds_e15);
   });
