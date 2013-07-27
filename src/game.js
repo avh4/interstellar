@@ -12,8 +12,11 @@ module.exports.prototype.start = function() {
 }
 
 module.exports.prototype.step = function(Δtime_years_e9) {
-  this.time_years_e9 += Δtime_years_e9;
-  this.systems.forEach(function(s) {
+  var th = this;
+  th.p1.currentCapture_W_e26 = 0;
+  th.time_years_e9 += Δtime_years_e9;
+  th.systems.forEach(function(s) {
+    th.p1[s.name] = {currentCapture_W_e26: 0};
     s.step(Δtime_years_e9);
   });
 }

@@ -57,11 +57,13 @@ module.exports.prototype.luminosity_W_e26 = function() {
 
 module.exports.prototype.step = function(Δtime_years_e9) {
   var Δtime_seconds_e15 = Δtime_years_e9 * (3600 * 24 * 365 / 1000000);
-  var radiated_J_e41 = this.luminosity_W_e26() * Δtime_seconds_e15;
+  var luminosity_W_e26 = this.luminosity_W_e26();
+  var radiated_J_e41 = luminosity_W_e26 * Δtime_seconds_e15;
   var radiated_g_e29 = radiated_J_e41 / 89.9;
+  var th = this;
   this.mass_g_e33 -= radiated_g_e29 / 10000;
   this._listeners.forEach(function(l) {
-    l.systemRadiatedEnergy_J_e41(radiated_J_e41);
+    l.systemRadiatedEnergy(th.name, luminosity_W_e26, Δtime_seconds_e15);
   });
 }
 

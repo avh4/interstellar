@@ -2,12 +2,15 @@ var Game = require('../src/game');
 var sinon = require('sinon'); require('jasmine-sinon');
 
 describe('Game', function(){
-  var s1 = {};
-  var systems = [s1];
-  var game = new Game(systems);
+  var s1;
+  var systems;
+  var game;
 
   beforeEach(function() {
+    s1 = {};
+    systems = [s1];
     s1.addListener = sinon.spy();
+    game = new Game(systems);
   });
 
   describe('a new game', function() {
@@ -33,8 +36,13 @@ describe('Game', function(){
   });
 
   describe('stepping a game', function() {
+    var p1;
+
     beforeEach(function() {
+      p1 = {};
       s1.step = sinon.stub();
+      game.p1 = p1;
+      game.start();
       game.step(0.1);
     });
 

@@ -6,7 +6,7 @@ describe('System', function() {
   var listener = {};
 
   beforeEach(function() {
-    listener.systemRadiatedEnergy_J_e41 = sinon.spy();
+    listener.systemRadiatedEnergy = sinon.spy();
     solarSystem.addListener(listener);
   });
 
@@ -21,10 +21,12 @@ describe('System', function() {
   describe('step()', function() {
     var Δtime_years_e9 = 1;
     var Δtime_seconds_e15 = Δtime_years_e9 * (3600 * 24 * 365 / 1000000);
+    var luminosity_W_e26;
     var radiated_J_e41;
 
     beforeEach(function() {
-      radiated_J_e41 = solarSystem.luminosity_W_e26() * Δtime_seconds_e15;
+      luminosity_W_e26 = solarSystem.luminosity_W_e26();
+      radiated_J_e41 = luminosity_W_e26 * Δtime_seconds_e15;
       expect(radiated_J_e41).toBeCloseTo(121.2874, 1);
     });
 
@@ -41,7 +43,7 @@ describe('System', function() {
 
     it('should emit radiation to listeners', function() {
       solarSystem.step(Δtime_years_e9);
-      expect(listener.systemRadiatedEnergy_J_e41).toHaveBeenCalledWith(radiated_J_e41);
+      expect(listener.systemRadiatedEnergy).toHaveBeenCalledWith("Solar System", luminosity_W_e26, Δtime_seconds_e15);
     });
   });
 });

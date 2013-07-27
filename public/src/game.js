@@ -17,6 +17,8 @@ function(CoordinateSystem, Player) {
     layer.add(this.ownedSystemsLabel);
     this.consumedEnergyLabel = new Kinetic.Text({x: 20, y: height-60, fill: "white"});
     layer.add(this.consumedEnergyLabel);
+    this.currentCaptureLabel = new Kinetic.Text({x: 20, y: height-80, fill: "white"});
+    layer.add(this.currentCaptureLabel);
     var th = this;
     this.model.systems.forEach(function(system) {
       var x = c.x(system);
@@ -60,6 +62,7 @@ function(CoordinateSystem, Player) {
 
     var harnessedEnergy_J_e33 = Math.round(1000000000 * this.model.p1.harnessedEnergy_J_e41) / 10;
     this.consumedEnergyLabel.setText(harnessedEnergy_J_e33 + " GYJ")
+    this.currentCaptureLabel.setText((this.model.p1.currentCapture_W_e26 * 100) + " TYW");
   };
 
   return Game;
