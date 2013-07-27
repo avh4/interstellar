@@ -64,17 +64,20 @@ io.configure(function () {
 
 
 var Game = require('./src/game');
-
-var sockets = {};
+var Player = require('./src/player');
+var systems = require('./src/systems');
 
 var games = {};
 var openGames = [];
 var activeGames = [];
 
+var sockets = {};
+
 function stepGame(game) {
   game.step(0.01);
 
-  sockets[game.p1].emit('update', game);
+  console.log(game);
+  sockets[game.p1.uid].emit('update', game);
   // sockets[game.p2].emit('update', game.uid);
   // sockets[game.p3].emit('update', game.uid);
 }
@@ -111,21 +114,22 @@ jobs.process('start game', function(job, done) {
   var game = games[job.data.game];
 
   openGames = _.without(openGames, game);
-  activeGames.push(game);
 
   console.log("Starting game " + game.uid);
-  sockets[game.p1].emit('start', game.uid);
+  sockets[game.p1.uid].emit('start', game.uid);
   // sockets[game.p2].emit('start', game.uid);
   // sockets[game.p3].emit('start', game.uid);
+  game.start();
 
+  activeGames.push(game);
   startStepLoop();
 
   done();
 });
 
-function joinGame(userId) {
+function joinGame(user) {
   if (openGames.length == 0) {
-    var game = new Game();
+    var game = new Game(systems);
     console.log("Created game: " + game.uid);
     games[game.uid] = game;
     openGames.push(game);
@@ -139,8 +143,8 @@ function joinGame(userId) {
   } else {
     role = "p3";
   }
-  game[role] = userId;
-  console.log("Player " + userId + " joined " + game.uid + " as " + role);
+  game[role] = user;
+  console.log("Player " + user.uid + " joined " + game.uid + " as " + role);
   return { game: game.uid, role: role};
 }
 
@@ -149,16 +153,16 @@ function terminateGame(game) {
   activeGames = _.without(activeGames, game);
 }
 
-function playerDisconnected(userId) {
-  console.log("Player disconnected " + userId);
-  var game = _.find(activeGames, function(game) { return game.p1 == userId; });
+function playerDisconnected(user) {
+  console.log("Player disconnected " + user.uid);
+  var game = _.find(activeGames, function(game) { return game.p1 === user; });
   terminateGame(game);
 }
 
 io.sockets.on('connection', function (socket) {
-  var userId = uuid.v1();
-  sockets[userId] = socket;
-  var joinInfo = joinGame(userId);
+  var user = new Player();
+  sockets[user.uid] = socket;
+  var joinInfo = joinGame(user);
   socket.emit('joined', joinInfo);
   var game = games[joinInfo.game];
   if (game.p1) {
@@ -168,9 +172,9 @@ io.sockets.on('connection', function (socket) {
     }).save();
   }
   socket.on('my other event', function (data) {
-    console.log("got data from " + userId + ":" + data);
+    console.log("got data from " + user.uid + ":" + data);
   });
   socket.on('disconnect', function() {
-    playerDisconnected(userId);
+    playerDisconnected(user);
   });
 });

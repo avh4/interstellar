@@ -17,8 +17,13 @@ define([], function() {
     socket.on('start', function(data) {
       callback();
     });
+    var debugCount = 0;
     socket.on('update', function(data) {
-      game.years = data.Myears;
+      debugCount++;
+      if (debugCount % 100 == 1) {
+        console.log(data);
+      }
+      game.model = data;
       game.update();
       stage.draw();
     });

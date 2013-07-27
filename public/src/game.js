@@ -1,7 +1,6 @@
 define(['coordinate_system', 'system', 'coordinate', 'player'],
 function(CoordinateSystem, System, Coordinate, Player) {
   function Game() {
-    this.player = new Player();
     this.systems = [
       new System("Solar System",    "G", new Coordinate([ 0,  0,  0], 0,  0     ),     0, 1    , 8),
       new System("Alpha Centauri",  "G", new Coordinate([14, 29, 43], 0,  4.2421), -3678, 2.130, 1),
@@ -20,7 +19,6 @@ function(CoordinateSystem, System, Coordinate, Player) {
       new System("WISE 0350-5658",  "Y", new Coordinate([ 3, 50,  0], 0, 11.208 ),  -125, 0    , 0),
       new System("EZ Aquarii",      "M", new Coordinate([22, 38, 33], 0, 11.266 ),  2314, 0.32 , 0),
     ];
-    this.years = 0;
   }
 
   Game.prototype.start = function(layer) {
@@ -28,7 +26,6 @@ function(CoordinateSystem, System, Coordinate, Player) {
     var height = layer.height;
     this.coordinateSystem = new CoordinateSystem(width, height, 15);
     var c = this.coordinateSystem;
-    var player = this.player;
 
     layer.add(new Kinetic.Rect({x: 0, y: 0, width: width, height: height, fill: "black"}));
     this.timeLabel = new Kinetic.Text({x: 20, y: height - 20, fill: "white"});
@@ -44,7 +41,7 @@ function(CoordinateSystem, System, Coordinate, Player) {
       var r = c.radius(system.radius);
       var group = new Kinetic.Group({x: x, y: y});
       group.add(new Kinetic.Circle({radius: r, fill: color}));
-      group.on("click", function() { player.toggleOwnership(system) });
+      // group.on("click", function() { player.toggleOwnership(system) });
       for (var i = 0; i < system.planets; i++) {
         group.add(new Kinetic.Circle({radius: r + 5 + 3*i, stroke: "grey"}));
       }
@@ -52,30 +49,30 @@ function(CoordinateSystem, System, Coordinate, Player) {
       system.e = group;
     });
 
-    this.player.toggleOwnership(this.systems[0]);
+    // this.player.toggleOwnership(this.systems[0]);
   }
 
   Game.prototype.update = function() {
-    this.player.update();
+    // this.player.update();
 
     var c = this.coordinateSystem;
     var as = 0.000277777778 / 180 * Math.PI;
     var step = .01;
-    this.years = Math.round(100*(this.years + step)) / 100;
-    this.timeLabel.setText(this.years + " million years");
+    var years = Math.round(100*(this.model.time_years_e9 + step)) / 100;
+    this.timeLabel.setText(years + " billion years");
     this.systems.forEach(function(system) {
       system.coordinate.ra += system.rad * as * step;
       system.e.setPosition(c.x(system), c.y(system));
     });
 
-    var ownedSystems = _.map(this.player.ownedSystems, function(s) {
-      var e = Math.round(100 * s.energy) / 100;
-      return s.name + "(" + e + ")"
-      });
-    this.ownedSystemsLabel.setText(ownedSystems.join(", "));
+    // var ownedSystems = _.map(this.player.ownedSystems, function(s) {
+    //   var e = Math.round(100 * s.energy) / 100;
+    //   return s.name + "(" + e + ")"
+    //   });
+    // this.ownedSystemsLabel.setText(ownedSystems.join(", "));
 
-    var consumed = Math.round(1000 * this.player.consumed) / 1000;
-    this.consumedEnergyLabel.setText(consumed + " x 10^30 TJ")
+    var harnessedEnergy_J_e33 = Math.round(1000000000 * this.model.p1.harnessedEnergy_J_e41) / 10;
+    this.consumedEnergyLabel.setText(harnessedEnergy_J_e33 + " GYJ")
   };
 
   return Game;
