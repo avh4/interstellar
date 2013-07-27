@@ -30,8 +30,8 @@ describe('Planetary Colony', function() {
     });
 
     it('should increase the player\'s capture', function() {
-      expect(player.currentCapture_W_e26).toBe(luminosity_W_e26);
-      expect(player[systemName].currentCapture_W_e26).toBe(luminosity_W_e26);
+      expect(player.currentCapture_W_e26).toBe(luminosity_W_e26 * capture_pernano / 1000000000);
+      expect(player[systemName].currentCapture_W_e26).toBe(luminosity_W_e26 * capture_pernano / 1000000000);
     });
   });
 });
