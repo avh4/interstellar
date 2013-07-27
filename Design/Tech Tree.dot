@@ -1,0 +1,43 @@
+digraph TECH {
+  "Type I"
+  
+  subgraph cluster_stellar_mining {
+    rank = same;
+    style = filled;
+    "Solar Collector (Planet-bound)";
+    "Solar Collector (Solar-bound)" -> "Solar Collector (Planet-bound)";
+    "Dyson Ring" -> "Solar Collector (Solar-bound)";
+    "Dyson Ring (8x)" -> "Dyson Ring";
+    "Dyson Sphere" -> "Dyson Ring (8x)";
+    "Black Hole collector" -> "Dyson Ring";
+  }
+  "Solar Collector (Planet-bound)" -> "Type I";
+  "Star lifting" -> "Dyson Ring (8x)";
+  "Black Hole collector" -> "Stellar transport";
+  
+  subgraph cluster_travel {
+    rank = same;
+    style = filled;
+    "Interplanetary Travel";
+    "Interstellar Travel" -> "Interplanetary Travel";
+    "Interstellar Travel (*)" -> "Interstellar Travel";
+  }
+  "Interplanetary Travel" -> "Type I";
+  
+  subgraph cluster_planetary_mining {
+    rank = same;
+    style = filled;
+    "Asteroid mining";
+    "Solid planet mining" -> "Asteroid mining";
+    "Gas Giant mining" -> "Asteroid mining";
+    "Dwarf Star mining" -> "Gas Giant mining";
+  }
+  "Asteroid mining" -> "Type I";
+  "Dwarf Star mining" -> "Star lifting";
+  
+  "Stellar acceleration" -> "Star lifting";
+  "Stellar acceleration" -> "Dwarf Star mining";
+  
+  "Stellar transport" -> "Stellar acceleration";
+  "Stellar transport" -> "Interstellar Travel (*)";
+}
