@@ -73,10 +73,12 @@ var activeGames = [];
 
 var sockets = {};
 
+var gameSpeed_years_e9_per_second = 30 * 0.01;
+var targetFPS = 3;
+var timerDelay_ms = 1000 / targetFPS;
 function stepGame(game) {
-  game.step(0.01);
+  game.step(gameSpeed_years_e9_per_second / targetFPS);
 
-  console.log(game);
   sockets[game.p1.uid].emit('update', game);
   // sockets[game.p2].emit('update', game.uid);
   // sockets[game.p3].emit('update', game.uid);
@@ -91,19 +93,19 @@ function startStepLoop() {
   isRunning = true;
   steps = 0;
   startTime = new Date().getTime();
-  setTimeout(step, 35);
+  setTimeout(step, timerDelay_ms);
 }
 function step() {
   activeGames.forEach(stepGame);
   if (activeGames.length > 0) {
-    setTimeout(step, 35);
+    setTimeout(step, timerDelay_ms);
   } else {
     console.log("No active games, stopping the step loop.");
     isRunning = false;
   }
 
   steps++;
-  if (steps % 100 == 0) {
+  if (steps % (5 * targetFPS) == 0) {
     var ms = new Date().getTime() - startTime;
     console.log("Running " + activeGames.length + " games, FPS: " + (steps * 1000/ ms));
   }
@@ -116,7 +118,7 @@ jobs.process('start game', function(job, done) {
   openGames = _.without(openGames, game);
 
   console.log("Starting game " + game.uid);
-  sockets[game.p1.uid].emit('start', game.uid);
+  sockets[game.p1.uid].emit('start', game);
   // sockets[game.p2].emit('start', game.uid);
   // sockets[game.p3].emit('start', game.uid);
   game.start();

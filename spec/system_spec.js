@@ -2,7 +2,7 @@ var System = require('../src/system');
 var sinon = require('sinon');
 
 describe('System', function() {
-  var solarSystem = new System(1);
+  var solarSystem = new System("Solar System",    "G", [ 0,  0,  0], 0,  0,     0, 1    , 8);
   var listener = {};
 
   beforeEach(function() {

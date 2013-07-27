@@ -9,15 +9,15 @@ define([], function() {
 
   CoordinateSystem.prototype.x = function(o) {
     var x0 = this.width / 2
-    var distance = o.coordinate.distance * this.scale_factor;
-    var dx = Math.cos(o.coordinate.ra) * distance;
+    var distance = o.distance * this.scale_factor;
+    var dx = Math.cos(o.ra_radians) * distance;
     return x0 + dx;
   }
 
   CoordinateSystem.prototype.y = function(o) {
     var y0 = this.height / 2
-    var distance = o.coordinate.distance * this.scale_factor;
-    var dy = Math.sin(o.coordinate.ra) * distance;
+    var distance = o.distance * this.scale_factor;
+    var dy = Math.sin(o.ra_radians) * distance;
     return y0 + dy;
   }
 

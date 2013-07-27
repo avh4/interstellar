@@ -15,6 +15,7 @@ define([], function() {
       socket.emit('my other event', { my: 'data' });
     });
     socket.on('start', function(data) {
+      game.model = data;
       callback();
     });
     var debugCount = 0;
