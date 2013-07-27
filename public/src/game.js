@@ -1,5 +1,5 @@
-define(['coordinate_system', 'player'],
-function(CoordinateSystem, Player) {
+define(['coordinate_system', 'player', 'number_formatter'],
+function(CoordinateSystem, Player, NumberFormatter) {
   function Game() {
     this.groups = {};
   }
@@ -31,7 +31,7 @@ function(CoordinateSystem, Player) {
       for (var i = 0; i < system.planets; i++) {
         group.add(new Kinetic.Circle({radius: r + 5 + 3*i, stroke: "grey"}));
       }
-      group.add(group.label = new Kinetic.Text({x: 0, y: 40, fill: "grey", align: "center"}));
+      group.add(group.label = new Kinetic.Text({x: -40, y: 40, width: 80, fill: "grey", align: "center"}));
       layer.add(group);
       th.groups[system.name] = group;
     });
@@ -51,7 +51,7 @@ function(CoordinateSystem, Player) {
     this.model.systems.forEach(function(system) {
     //   system.coordinate.ra += system.rad * as * step;
     //   system.e.setPosition(c.x(system), c.y(system));
-      th.groups[system.name].label.setText(system.mass_g_e33);
+      th.groups[system.name].label.setText(NumberFormatter.format(system.mass_g_e33, 33, 5, "g"));
     });
 
     // var ownedSystems = _.map(this.player.ownedSystems, function(s) {
@@ -60,9 +60,8 @@ function(CoordinateSystem, Player) {
     //   });
     // this.ownedSystemsLabel.setText(ownedSystems.join(", "));
 
-    var harnessedEnergy_J_e33 = Math.round(1000000000 * this.model.p1.harnessedEnergy_J_e41) / 10;
-    this.consumedEnergyLabel.setText(harnessedEnergy_J_e33 + " GYJ")
-    this.currentCaptureLabel.setText((this.model.p1.currentCapture_W_e26 * 100) + " TYW");
+    this.consumedEnergyLabel.setText(NumberFormatter.format(this.model.p1.harnessedEnergy_J_e41, 41, 3, "J"));
+    this.currentCaptureLabel.setText(NumberFormatter.format(this.model.p1.currentCapture_W_e26, 26, 5, "W"));
   };
 
   return Game;
