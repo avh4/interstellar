@@ -47,7 +47,7 @@ function(CoordinateSystem, Player, NumberFormatter) {
     var as = 0.000277777778 / 180 * Math.PI;
     var step = .01;
     var years = Math.round(100*(this.model.time_years_e9 + step)) / 100;
-    this.timeLabel.setText(years + " billion years");
+    this.timeLabel.setText(years + " billion years have passed");
     this.model.systems.forEach(function(system) {
     //   system.coordinate.ra += system.rad * as * step;
     //   system.e.setPosition(c.x(system), c.y(system));
@@ -60,8 +60,8 @@ function(CoordinateSystem, Player, NumberFormatter) {
     //   });
     // this.ownedSystemsLabel.setText(ownedSystems.join(", "));
 
-    this.consumedEnergyLabel.setText(NumberFormatter.format(this.model.p1.harnessedEnergy_J_e41, 41, 3, "J"));
-    this.currentCaptureLabel.setText(NumberFormatter.format(this.model.p1.currentCapture_W_e26, 26, 5, "W"));
+    this.consumedEnergyLabel.setText("Your civilization has expended " + NumberFormatter.format(this.model.p1.harnessedEnergy_J_e41, 41, 3, "J") + " in its entire history");
+    this.currentCaptureLabel.setText("Your civilzation is currently making use of " + NumberFormatter.format(this.model.p1.currentCapture_W_e26, 26, 5, "W"));
   };
 
   return Game;
