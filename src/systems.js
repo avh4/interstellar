@@ -3,7 +3,8 @@ var System = require('./system');
 var MS = 1;
 var MJ = 0.0009546 * MS;
 
-module.exports = [
+module.exports = function() {
+  return [
   new System("Solar System",    "G", [ 0,  0,  0], 0,  0     ,     0, 1    , 8),
   new System("Alpha Centauri",  "G", [14, 29, 43], 0,  4.2421, -3678, 2.130, 1),
   new System("Barnard's Star",  "M", [17, 57, 49], 0,  5.9630,  -798, 0.144, 0),
@@ -20,4 +21,4 @@ module.exports = [
   new System("Ross 128",        "M", [11, 47, 44], 0, 10.919 ,   605, 0.15 , 0),
   new System("WISE 0350-5658",  "Y", [ 3, 50,  0], 0, 11.208 ,  -125, 10*MJ, 0),
   new System("EZ Aquarii",      "M", [22, 38, 33], 0, 11.266 ,  2314, 0.32 , 0),
-]
+]}

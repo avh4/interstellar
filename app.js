@@ -131,7 +131,7 @@ jobs.process('start game', function(job, done) {
 
 function joinGame(user) {
   if (openGames.length == 0) {
-    var game = new Game(systems);
+    var game = new Game(systems());
     console.log("Created game: " + game.uid);
     games[game.uid] = game;
     openGames.push(game);
