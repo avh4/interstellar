@@ -43,6 +43,16 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
       group.add(group.taskLabel = new Kinetic.Text({x: -40, y: 70, width: 80, fill: playerColor(100, 88), align: "center"}));
       group.add(group.buttons = new Kinetic.Group());
       layer.add(group);
+
+      if (system.name == "Solar System") {
+        var stellarMiningButton = new ActionButton("Stellar Mining", playerHue, {x: 40, y: -20});
+        group.buttons.add(stellarMiningButton);
+
+        stellarMiningButton.on("click", function() {
+          th.actions.stellarMining(system);
+        });
+      }
+
       th.groups[system.name] = group;
     });
 
@@ -52,6 +62,7 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
   Game.prototype.update = function(actions) {
     // this.player.update();
     var th = this;
+    this.actions = actions;
 
     var c = this.coordinateSystem;
     var as = 0.000277777778 / 180 * Math.PI;
@@ -67,16 +78,6 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
       group.label2.setText(NumberFormatter.format(system.output_W_e26, 26, 3, "W"));
       if (!!player.tasks[system.name]) {
         group.taskLabel.setText(player.tasks[system.name].description);
-      }
-
-      if (system.name == "Solar System") {
-        th.groups[system.name].buttons.removeChildren();
-        var stellarMiningButton = new ActionButton("Stellar Mining", playerHue, {x: 40, y: -20});
-        th.groups[system.name].buttons.add(stellarMiningButton);
-
-        stellarMiningButton.on("click", function() {
-          actions.stellarMining(system);
-        });
       }
     });
 
