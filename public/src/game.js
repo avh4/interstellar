@@ -71,7 +71,6 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
         var dy = stellarMiningButton.attrs.y;
         var radians = Math.atan2(dx, dy);
         var percent = .5 - radians / (2*Math.PI);
-        console.log(percent);
       });
       stellarMiningButton.on("dragend", function() {
         var x = 400;

@@ -13,7 +13,7 @@ describe('Game', function(){
     s1.addListener = sinon.spy();
     systems = [s1];
     p1 = {};
-    p1.setTask = sinon.spy();
+    p1.getDistributer = sinon.spy();
     p1.abilitiesFor = sinon.stub().returns({});
 
     game = new Game(systems);
@@ -33,8 +33,7 @@ describe('Game', function(){
 
   describe('starting a game', function() {
     beforeEach(function() {
-      game.p1 = p1;
-      game.start();
+      game.start(p1);
     });
 
     it('should have time = 0', function() {
@@ -46,8 +45,7 @@ describe('Game', function(){
 
     beforeEach(function() {
       s1.step = sinon.stub();
-      game.p1 = p1;
-      game.start();
+      game.start(p1);
       game.step(0.1);
     });
 
@@ -57,20 +55,6 @@ describe('Game', function(){
 
     it('steps systems', function() {
       expect(s1.step).toHaveBeenCalledWith(0.1);
-    });
-  });
-
-  describe('actions', function() {
-    describe('stellar mining', function() {
-      beforeEach(function() {
-        game.p1 = p1;
-        game.start();
-        game.playerAction('p1', { player: 'p1', action: 'stellarMining', system: 'Solar System' });
-      });
-
-      it('should set the player\'s task at the system', function() {
-        expect(p1.setTask).toHaveBeenCalledWith('Solar System', sinon.match.instanceOf(StellarMiningResearch));
-      });
     });
   });
 });

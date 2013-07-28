@@ -13,9 +13,8 @@ describe('EnergyDistributer', function() {
   beforeEach(function() {
     logHarnessedEnergy_J_e41 = sinon.spy();
     logCurrentCapture_W_e26 = sinon.spy();
-    receiveEnergy_J_e41 = sinon.spy();
-    getAbilities = sinon.stub().withArgs('Solar System').returns({ capture_pernano: 500000000 });
-    subject = new EnergyDistributer(logHarnessedEnergy_J_e41, logCurrentCapture_W_e26, receiveEnergy_J_e41, getAbilities);
+    abilities = { capture_pernano: 500000000 };
+    subject = new EnergyDistributer(logHarnessedEnergy_J_e41, logCurrentCapture_W_e26, abilities);
   });
 
   describe('when it recieves stellar radiation', function() {
@@ -23,9 +22,9 @@ describe('EnergyDistributer', function() {
       subject.systemRadiatedEnergy(systemName, luminosity_W_e26, Δtime_seconds_e15);
     });
 
-    it('should capture and distribute energy', function() {
-      expect(receiveEnergy_J_e41).toHaveBeenCalledWith('Solar System', 350 * Δtime_seconds_e15);
-    });
+    // it('should capture and distribute energy', function() {
+    //   expect(receiveEnergy_J_e41).toHaveBeenCalledWith('Solar System', 350 * Δtime_seconds_e15);
+    // });
 
     it('should increase the player\'s harnessed energy total', function() {
       expect(logHarnessedEnergy_J_e41).toHaveBeenCalledWith('Solar System', 350 * Δtime_seconds_e15);

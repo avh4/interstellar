@@ -47,7 +47,7 @@ module.exports.prototype.updateStage = function() {
   }
 }
 
-module.exports.prototype.receiveEnergy = function(energy_J_e41) {
+module.exports.prototype.receiveEnergy_J_e41 = function(energy_J_e41) {
   this.energy_J_e41 += energy_J_e41;
   this.updateStage();
 }

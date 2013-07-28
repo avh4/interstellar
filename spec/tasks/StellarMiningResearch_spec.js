@@ -13,8 +13,4 @@ describe('StellarMiningResearch', function() {
   it('should have a description', function() {
     expect(subject.toClient().description).toBeDefined();
   });
-
-  it('should start with zero progress', function() {
-    expect(subject.toClient().progress).toBe(0);
-  });
 });

@@ -121,7 +121,7 @@ jobs.process('start game', function(job, done) {
   sockets[game.p1.uid].emit('start', game);
   // sockets[game.p2].emit('start', game.uid);
   // sockets[game.p3].emit('start', game.uid);
-  game.start();
+  game.start(game.p1);
 
   activeGames.push(game);
   startStepLoop();
