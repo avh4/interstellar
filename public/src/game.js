@@ -59,8 +59,17 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
       th.groups[system.name].topGroup = topGroup;
 
       group.on("mouseover", function() {
+        topGroup.setOpacity(0);
+        topGroup.setScale(.9, .9);
         topGroup.show();
         topGroup.moveToTop();
+        new Kinetic.Tween({
+          node: topGroup,
+          duration: .3, easing: Kinetic.Easings.EaseOut,
+          opacity: 1,
+          scaleX: 1,
+          scaleY: 1
+        }).play();
       });
       topGroup.on("mouseover", function() {
         topGroup.show();
