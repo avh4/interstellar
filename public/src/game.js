@@ -5,10 +5,8 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
     return 'hsl(' + playerHue + ',' + saturation + '%,' + + lightness + '%)';
   }
 
-  function ringDragBounds(radius) {
+  function ringDragBounds(radius, x, y) {
     return function(pos) {
-      var x = 400;
-      var y = 300;
       var scale = radius / Math.sqrt(Math.pow(pos.x - x, 2) + Math.pow(pos.y - y, 2));
       return {
         x: (pos.x - x) * scale + x,
@@ -50,7 +48,6 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
       var color = system.color;
       var r = c.radius(system.radius);
       var group = new Kinetic.Group({x: x, y: y});
-      console.log({x: x, y: y});
       var topGroup = new Kinetic.Group({x: x, y: y});
       group.add(new Kinetic.Circle({radius: r, fill: color}));
       for (var i = 0; i < system.planets; i++) {
@@ -68,20 +65,12 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
       topGroup.buttons.add(new Kinetic.Circle({radius: menuSize/2, stroke: "white"}));
       topGroup.buttons.hide();
 
-      var stellarMiningButton = new ActionButton("Stellar Mining", playerHue, {x: 0, y: -menuSize/2, draggable: true, dragBoundFunc: ringDragBounds(menuSize/2)});
+      var stellarMiningButton = new ActionButton("Stellar Mining", playerHue, {x: 0, y: -menuSize/2, draggable: true, dragBoundFunc: ringDragBounds(menuSize/2, x, y)});
       topGroup.buttons.add(stellarMiningButton);
 
       stellarMiningButton.on("dragmove", function() {
-        var x = 400;
-        var y = 300;
-        var dx = stellarMiningButton.attrs.x;
-        var dy = stellarMiningButton.attrs.y;
-        var radians = Math.atan2(dx, dy);
-        var percent = .5 - radians / (2*Math.PI);
       });
       stellarMiningButton.on("dragend", function() {
-        var x = 400;
-        var y = 300;
         var dx = stellarMiningButton.attrs.x;
         var dy = stellarMiningButton.attrs.y;
         var radians = Math.atan2(dx, dy);
