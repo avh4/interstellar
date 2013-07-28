@@ -49,9 +49,8 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
 
     var c = this.coordinateSystem;
     var as = 0.000277777778 / 180 * Math.PI;
-    var step = .01;
-    var years = Math.round(100*(this.model.time_years_e9 + step)) / 100;
-    this.timeLabel.setText(years + " billion years have passed");
+    var years = Math.round(100*(this.model.time_years_e9*1000)) / 100;
+    this.timeLabel.setText(years + " million years have passed");
     this.model.systems.forEach(function(system) {
     //   system.coordinate.ra += system.rad * as * step;
     //   system.e.setPosition(c.x(system), c.y(system));

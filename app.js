@@ -73,7 +73,7 @@ var activeGames = [];
 
 var sockets = {};
 
-var gameSpeed_years_e9_per_second = 30 * 0.01;
+var gameSpeed_years_e9_per_second = 30 * 0.0001;
 var targetFPS = 3;
 var timerDelay_ms = 1000 / targetFPS;
 function stepGame(game) {
