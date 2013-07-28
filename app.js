@@ -79,7 +79,7 @@ var timerDelay_ms = 1000 / targetFPS;
 function stepGame(game) {
   game.step(gameSpeed_years_e9_per_second / targetFPS);
 
-  sockets[game.p1.uid].emit('update', game);
+  sockets[game.p1.uid].emit('update', game.toClient());
   // sockets[game.p2].emit('update', game.uid);
   // sockets[game.p3].emit('update', game.uid);
 }
@@ -165,6 +165,7 @@ io.sockets.on('connection', function (socket) {
   var user = new Player();
   sockets[user.uid] = socket;
   var joinInfo = joinGame(user);
+  var role = joinInfo.role;
   socket.emit('joined', joinInfo);
   var game = games[joinInfo.game];
   if (game.p1) {
@@ -176,6 +177,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('action', function (data) {
     console.log("got action from " + user.uid);
     console.log(data);
+    game.playerAction(role, data);
   });
   socket.on('disconnect', function() {
     playerDisconnected(user);

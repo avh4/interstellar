@@ -5,6 +5,7 @@ require('jasmine-sinon');
 describe('EnergyDistributer', function() {
   var subject;
   var player;
+  var task;
   var systemName = "Solar System";
   var luminosity_W_e26 = 700;
   var Δtime_seconds_e15 = 100;
@@ -12,6 +13,9 @@ describe('EnergyDistributer', function() {
   beforeEach(function() {
     player = { harnessedEnergy_J_e41: 0, currentCapture_W_e26: 0,
       "Solar System": { currentCapture_W_e26: 0} };
+    task = {};
+    task.receiveEnergy = sinon.spy();
+    player.taskFor = sinon.stub().withArgs('Solar System').returns(task);
     subject = new EnergyDistributer(player);
   });
 
@@ -22,13 +26,12 @@ describe('EnergyDistributer', function() {
       beforeEach(function() {
         c1 = {};
         c1.captureEnergy_W_e26 = sinon.stub().withArgs(luminosity_W_e26).returns(350);
-        c1.receiveEnergy = sinon.spy();
         subject.addComponent(c1);
         subject.systemRadiatedEnergy(systemName, luminosity_W_e26, Δtime_seconds_e15);
       });
 
       it('should capture and distribute energy', function() {
-        expect(c1.receiveEnergy).toHaveBeenCalledWith(350);
+        expect(task.receiveEnergy).toHaveBeenCalledWith(350);
       });
 
       it('should increase the player\'s harnessed energy total', function() {
@@ -49,16 +52,13 @@ describe('EnergyDistributer', function() {
         c2 = {};
         c1.captureEnergy_W_e26 = sinon.stub().withArgs(700).returns(350);
         c2.captureEnergy_W_e26 = sinon.stub().withArgs(700).returns(200);
-        c1.receiveEnergy = sinon.stub().withArgs(550).returns(400);
-        c2.receiveEnergy = sinon.spy();
         subject.addComponent(c1);
         subject.addComponent(c2);
       });
 
       it('should capture and distribute energy', function() {
         subject.systemRadiatedEnergy(systemName, luminosity_W_e26, Δtime_seconds_e15);
-        expect(c1.receiveEnergy).toHaveBeenCalledWith(550);
-        expect(c2.receiveEnergy).toHaveBeenCalledWith(150);
+        expect(task.receiveEnergy).toHaveBeenCalledWith(550);
       });
     });
   });

@@ -71,3 +71,15 @@ module.exports.prototype.step = function(Δtime_years_e9) {
 module.exports.prototype.addListener = function(l) {
   this._listeners.push(l);
 }
+
+module.exports.prototype.toClient = function() {
+  return {
+    name: this.name,
+    mass_g_e33: this.mass_g_e33,
+    output_W_e26: this.output_W_e26
+  };
+}
+
+module.exports.prototype.toString = function() {
+  return '[System "' + this.name + '"]';
+}
