@@ -1,5 +1,10 @@
 define(['coordinate_system', 'player', 'number_formatter', 'ui/action_button'],
 function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
+  var playerHue = 0;
+  function playerColor(saturation, lightness) {
+    return 'hsl(' + playerHue + ',' + saturation + '%,' + + lightness + '%)';
+  }
+
   function Game() {
     this.groups = {};
   }
@@ -35,7 +40,7 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
       }
       group.add(group.label = new Kinetic.Text({x: -40, y: 40, width: 80, fill: "grey", align: "center"}));
       group.add(group.label2 = new Kinetic.Text({x: -40, y: 55, width: 80, fill: "grey", align: "center"}));
-      group.add(group.taskLabel = new Kinetic.Text({x: -40, y: 70, width: 80, fill: "#ffc2c2", align: "center"}));
+      group.add(group.taskLabel = new Kinetic.Text({x: -40, y: 70, width: 80, fill: playerColor(100, 88), align: "center"}));
       group.add(group.buttons = new Kinetic.Group());
       layer.add(group);
       th.groups[system.name] = group;
@@ -66,7 +71,7 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
 
       if (system.name == "Solar System") {
         th.groups[system.name].buttons.removeChildren();
-        var stellarMiningButton = new ActionButton("Stellar Mining", {x: 40, y: -20});
+        var stellarMiningButton = new ActionButton("Stellar Mining", playerHue, {x: 40, y: -20});
         th.groups[system.name].buttons.add(stellarMiningButton);
 
         stellarMiningButton.on("click", function() {

@@ -1,7 +1,11 @@
 define([], function() {
   var buttonSize = 34;
 
-  function ActionButton(title, attr) {
+  function hsl(hue, saturation, lightness) {
+    return 'hsl(' + hue + ',' + saturation + '%,' + + lightness + '%)';
+  }
+
+  function ActionButton(title, hue, attr) {
     Kinetic.Group.call(this, attr);
     var th = this;
     var frame, background, text;
@@ -26,7 +30,7 @@ define([], function() {
     }));
 
     this.on("mouseover", function() {
-      frame.setStroke("red");
+      frame.setStroke(hsl(hue, 100, 50));
       this.draw();
     });
 
