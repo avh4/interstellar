@@ -16,7 +16,13 @@ module.exports.prototype.start = function() {
   var system = this.systems[0];
   var distributer = this.distributers[role][system.name];
   if (!distributer) {
-    distributer = this.distributers[role][system.name] = new EnergyDistributer(player);
+    distributer = this.distributers[role][system.name] = new EnergyDistributer(
+      { logHarnessedEnergy_J_e41: function(s, v) { player.harnessedEnergy_J_e41 += v },
+      logCurrentCapture_W_e26: function(s, v) {
+        player.currentCapture_W_e26 += v;
+        player[s].currentCapture_W_e26 += v;
+      }}, { receiveEnergy_J_e41: function(s, v) { player.taskFor(s).receiveEnergy(v) } }
+      );
     system.addListener(distributer);
   }
   distributer.addComponent(new PlanetaryColony(player));
