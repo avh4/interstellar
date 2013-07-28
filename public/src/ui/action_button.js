@@ -20,11 +20,9 @@ define([], function() {
       strokeWidth: 3
     }));
     this.add(text = new Kinetic.Text({
-      x: -buttonSize/2,
-      y: -buttonSize/2,
-      width: buttonSize,
-      height: buttonSize,
-      align: "center",
+      x: buttonSize/2 + 4,
+      y: -7,
+      align: "left",
       fill: "white",
       text: title
     }));

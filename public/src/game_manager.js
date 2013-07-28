@@ -19,9 +19,9 @@ define([], function() {
     });
 
     var actions = {
-      stellarMining: function(system) {
-        console.log("Sending player action: p1: stellarMining: " + system.name);
-        socket.emit('action', { player: 'p1', action: 'stellarMining', system: system.name });
+      changePercentages: function(system, percentages) {
+        console.log("Sending player action: p1: changePercentages: " + system.name);
+        socket.emit('action', { player: 'p1', action: 'changePercentages', system: system.name, percentages: percentages });
       }
     };
 
