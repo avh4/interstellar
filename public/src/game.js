@@ -1,18 +1,8 @@
-define(['coordinate_system', 'player', 'number_formatter', 'ui/action_button'],
-function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
+define(['coordinate_system', 'player', 'number_formatter', 'ui/percentage_menu'],
+function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
   var playerHue = 0;
   function playerColor(saturation, lightness) {
     return 'hsl(' + playerHue + ',' + saturation + '%,' + + lightness + '%)';
-  }
-
-  function ringDragBounds(radius, x, y) {
-    return function(pos) {
-      var scale = radius / Math.sqrt(Math.pow(pos.x - x, 2) + Math.pow(pos.y - y, 2));
-      return {
-        x: (pos.x - x) * scale + x,
-        y: (pos.y - y) * scale + y
-      }
-    };
   }
 
   function Game() {
@@ -57,40 +47,29 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
       group.add(group.label2 = new Kinetic.Text({x: -40, y: 55, width: 80, fill: "grey", align: "center"}));
       group.add(group.taskLabel = new Kinetic.Text({x: -40, y: 70, width: 80, fill: playerColor(100, 88), align: "center"}));
       layer.add(group);
-      topGroup.add(topGroup.buttons = new Kinetic.Group());
+      var percentages = { stellarMining: 0.5 };
+      topGroup.add(new PercentageMenu(x, y, playerHue,
+        percentages,
+        function() {
+          th.actions.changePercentages(system, percentages);
+        }));
       topLayer.add(topGroup);
 
-      var menuSize = 200;
-      topGroup.buttons.add(new Kinetic.Circle({radius: menuSize/2, fill: "#333", opacity: 0.4}));
-      topGroup.buttons.add(new Kinetic.Circle({radius: menuSize/2, stroke: "white"}));
-      topGroup.buttons.hide();
-
-      var stellarMiningButton = new ActionButton("Stellar Mining", playerHue, {x: 0, y: -menuSize/2, draggable: true, dragBoundFunc: ringDragBounds(menuSize/2, x, y)});
-      topGroup.buttons.add(stellarMiningButton);
-
-      stellarMiningButton.on("dragmove", function() {
-      });
-      stellarMiningButton.on("dragend", function() {
-        var dx = stellarMiningButton.attrs.x;
-        var dy = stellarMiningButton.attrs.y;
-        var radians = Math.atan2(dx, dy);
-        var percent = .5 - radians / (2*Math.PI);
-        th.actions.changePercentages(system, { stellarMining: percent});
-      });
+      topGroup.hide();
 
       th.groups[system.name] = group;
       th.groups[system.name].topGroup = topGroup;
 
       group.on("mouseover", function() {
-        topGroup.buttons.show();
-        topGroup.draw();
+        topGroup.show();
+        topGroup.moveToTop();
       });
       topGroup.on("mouseover", function() {
-        topGroup.buttons.show();
-        topGroup.draw();        
+        topGroup.show();
+        topGroup.moveToTop();
       });
       topGroup.on("mouseout", function() {
-        topGroup.buttons.hide();
+        topGroup.hide();
       });
     });
 

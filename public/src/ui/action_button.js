@@ -12,7 +12,7 @@ define([], function() {
     this.add(background = new Kinetic.Circle({
       radius: buttonSize/2,
       fill: "#333",
-      opacity: "0.4"
+      opacity: 0.7
     }));
     this.add(frame = new Kinetic.Circle({
       radius: buttonSize/2,
@@ -26,14 +26,25 @@ define([], function() {
       fill: "white",
       text: title
     }));
+    this.add(this.inner = inner = new Kinetic.Text({
+      x: -buttonSize/2,
+      y: -7,
+      width: buttonSize,
+      align: "center",
+      fill: "#333"
+    }))
 
     this.on("mouseover", function() {
-      frame.setStroke(hsl(hue, 100, 50));
+      frame.setStroke("white");
+      background.setOpacity(1);
+      background.setFill(hsl(hue, 90, 80));
       this.draw();
     });
 
     this.on("mouseout", function() {
-      frame.setStroke("white");
+      frame.setStroke(hsl(hue, 100, 50));
+      background.setOpacity(0.7);
+      background.setFill("#333");
       this.draw();
     });
   }
