@@ -39,7 +39,7 @@ module.exports.prototype.step = function(Δtime_years_e9) {
 }
 
 module.exports.prototype.playerAction = function(role, action) {
-  this.p1.setTask(action.system, new StellarMiningResearch());
+  this.p1.setTask(action.system, new StellarMiningResearch(this.p1.abilitiesFor(action.system)));
 }
 
 module.exports.prototype.toClient = function() {

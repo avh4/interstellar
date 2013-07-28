@@ -14,6 +14,7 @@ describe('Game', function(){
     systems = [s1];
     p1 = {};
     p1.setTask = sinon.spy();
+    p1.abilitiesFor = sinon.stub().returns({});
 
     game = new Game(systems);
   });

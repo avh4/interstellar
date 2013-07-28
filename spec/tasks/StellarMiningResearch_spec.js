@@ -3,9 +3,11 @@ var sinon = require('sinon');
 
 describe('StellarMiningResearch', function() {
   var subject;
+  var abilities;
 
   beforeEach(function() {
-    subject = new StellarMiningResearch();
+    abilities = {};
+    subject = new StellarMiningResearch(abilities);
   });
 
   it('should have a description', function() {

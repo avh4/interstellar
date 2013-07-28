@@ -6,6 +6,7 @@ module.exports = function() {
   this.harnessedEnergy_J_e41 = 0;
   this.currentCapture_W_e26 = 0;
   this.tasks = {};
+  this.abilities = {};
 }
 
 module.exports.prototype.toClient = function() {
@@ -33,7 +34,10 @@ module.exports.prototype.taskFor = function(systemName) {
 }
 
 module.exports.prototype.abilitiesFor = function(systemName) {
-  return { capture_pernano: 1.411 };
+  if (!this.abilities[systemName]) {
+    this.abilities[systemName] = { capture_pernano: 1.411 };
+  }
+  return this.abilities[systemName];
 }
 
 module.exports.prototype.toString = function() {
