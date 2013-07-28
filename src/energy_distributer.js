@@ -1,6 +1,8 @@
-module.exports = function(stats, output) {
-  this.stats = stats;
-  this.output = output;
+module.exports = function(logHarnessedEnergy_J_e41, logCurrentCapture_W_e26,
+    receiveEnergy_J_e41) {
+  this.logHarnessedEnergy_J_e41 = logHarnessedEnergy_J_e41;
+  this.logCurrentCapture_W_e26 = logCurrentCapture_W_e26;
+  this.receiveEnergy_J_e41 = receiveEnergy_J_e41;
   this._components = [];
 }
 
@@ -16,8 +18,8 @@ function(systemName, luminosity_W_e26, Δtime_seconds_e15) {
     energy_W_e26 += c.captureEnergy_W_e26(luminosity_W_e26, Δtime_seconds_e15);
   });
   var energy_J_e41 = energy_W_e26 * Δtime_seconds_e15;
-  this.stats.logHarnessedEnergy_J_e41(systemName, energy_J_e41);
-  this.stats.logCurrentCapture_W_e26(systemName, energy_W_e26);
+  this.logHarnessedEnergy_J_e41(systemName, energy_J_e41);
+  this.logCurrentCapture_W_e26(systemName, energy_W_e26);
 
-  this.output.receiveEnergy_J_e41(systemName, energy_J_e41);
+  this.receiveEnergy_J_e41(systemName, energy_J_e41);
 }

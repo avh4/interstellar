@@ -4,19 +4,17 @@ require('jasmine-sinon');
 
 describe('EnergyDistributer', function() {
   var subject;
-  var stats;
-  var output;
+  var logHarnessedEnergy_J_e41, logCurrentCapture_W_e26;
+  var receiveEnergy_J_e41;
   var systemName = "Solar System";
   var luminosity_W_e26 = 700;
   var Δtime_seconds_e15 = 100;
 
   beforeEach(function() {
-    stats = {};
-    stats.logHarnessedEnergy_J_e41 = sinon.spy();
-    stats.logCurrentCapture_W_e26 = sinon.spy();
-    output = {};
-    output.receiveEnergy_J_e41 = sinon.spy();
-    subject = new EnergyDistributer(stats, output);
+    logHarnessedEnergy_J_e41 = sinon.spy();
+    logCurrentCapture_W_e26 = sinon.spy();
+    receiveEnergy_J_e41 = sinon.spy();
+    subject = new EnergyDistributer(logHarnessedEnergy_J_e41, logCurrentCapture_W_e26, receiveEnergy_J_e41);
   });
 
   describe('when it recieves stellar radiation', function() {
@@ -31,15 +29,15 @@ describe('EnergyDistributer', function() {
       });
 
       it('should capture and distribute energy', function() {
-        expect(output.receiveEnergy_J_e41).toHaveBeenCalledWith('Solar System', 350 * Δtime_seconds_e15);
+        expect(receiveEnergy_J_e41).toHaveBeenCalledWith('Solar System', 350 * Δtime_seconds_e15);
       });
 
       it('should increase the player\'s harnessed energy total', function() {
-        expect(stats.logHarnessedEnergy_J_e41).toHaveBeenCalledWith('Solar System', 350 * Δtime_seconds_e15);
+        expect(logHarnessedEnergy_J_e41).toHaveBeenCalledWith('Solar System', 350 * Δtime_seconds_e15);
       });
 
       it('should increase the player\'s capture', function() {
-        expect(stats.logCurrentCapture_W_e26).toHaveBeenCalledWith('Solar System', 350);
+        expect(logCurrentCapture_W_e26).toHaveBeenCalledWith('Solar System', 350);
       });
     });
 
@@ -57,7 +55,7 @@ describe('EnergyDistributer', function() {
 
       it('should capture and distribute energy', function() {
         subject.systemRadiatedEnergy(systemName, luminosity_W_e26, Δtime_seconds_e15);
-        expect(output.receiveEnergy_J_e41).toHaveBeenCalledWith('Solar System', 550 * Δtime_seconds_e15);
+        expect(receiveEnergy_J_e41).toHaveBeenCalledWith('Solar System', 550 * Δtime_seconds_e15);
       });
     });
   });
