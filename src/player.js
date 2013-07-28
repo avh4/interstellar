@@ -35,7 +35,7 @@ module.exports.prototype.taskFor = function(systemName) {
 
 module.exports.prototype.abilitiesFor = function(systemName) {
   if (!this.abilities[systemName]) {
-    this.abilities[systemName] = { capture_pernano: 1.411 };
+    this.abilities[systemName] = { capture_pernano: 0 };
   }
   return this.abilities[systemName];
 }

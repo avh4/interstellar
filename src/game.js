@@ -12,19 +12,21 @@ module.exports.prototype.start = function() {
   this.time_years_e9 = 0;
   var role = 'p1';
   var player = this[role];
-  var system = this.systems[0];
-  var distributer = this.distributers[role][system.name];
-  if (!distributer) {
-    distributer = this.distributers[role][system.name] = new EnergyDistributer(
-      function(s, v) { player.harnessedEnergy_J_e41 += v },
-      function(s, v) {
-        player.currentCapture_W_e26 += v;
-        player[s].currentCapture_W_e26 += v;
-      },
-      function(s, v) { player.taskFor(s).receiveEnergy(v) },
-      function(s) { return player.abilitiesFor(s) }
-      );
-    system.addListener(distributer);
+  for (var i in this.systems) {
+    var system = this.systems[i];
+    var distributer = this.distributers[role][system.name];
+    if (!distributer) {
+      distributer = this.distributers[role][system.name] = new EnergyDistributer(
+        function(s, v) { player.harnessedEnergy_J_e41 += v },
+        function(s, v) {
+          player.currentCapture_W_e26 += v;
+          player[s].currentCapture_W_e26 += v;
+        },
+        function(s, v) { player.taskFor(s).receiveEnergy(v) },
+        function(s) { return player.abilitiesFor(s) }
+        );
+      system.addListener(distributer);
+    }
   }
 }
 

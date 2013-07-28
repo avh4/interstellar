@@ -27,7 +27,7 @@
     var v = value;
     v = v * Math.pow(10, (e % 3));
     e -= (e % 3);
-    while (v < 1) {
+    while (v < 1 && v > 0) {
       v *= 1000;
       e -= 3;
     }

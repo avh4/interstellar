@@ -44,14 +44,12 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
       group.add(group.buttons = new Kinetic.Group());
       layer.add(group);
 
-      if (system.name == "Solar System") {
-        var stellarMiningButton = new ActionButton("Stellar Mining", playerHue, {x: 40, y: -20});
-        group.buttons.add(stellarMiningButton);
+      var stellarMiningButton = new ActionButton("Stellar Mining", playerHue, {x: 40, y: -20});
+      group.buttons.add(stellarMiningButton);
 
-        stellarMiningButton.on("click", function() {
-          th.actions.stellarMining(system);
-        });
-      }
+      stellarMiningButton.on("click", function() {
+        th.actions.stellarMining(system);
+      });
 
       th.groups[system.name] = group;
     });

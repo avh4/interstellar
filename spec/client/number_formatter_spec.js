@@ -68,5 +68,15 @@ describe('NumberFormatter', function() {
   it('should normalize exponent for odd exponents', function() {
     expect(NumberFormatter.format(77.13471, 26, 3, "W")).toBe("7.71 kYW");
     expect(NumberFormatter.format(0.001947, 26, 3, "W")).toBe("195 ZW");
+  });
+
+  it('should work for zero', function() {
+    expect(NumberFormatter.format(0, 0, 1, "g")).toBe("0 g");
+    expect(NumberFormatter.format(0, 0, 2, "g")).toBe("0.0 g");
+  });
+
+  it('should use reference scale for zero', function() {
+    expect(NumberFormatter.format(0, 6, 1, "g")).toBe("0 Mg");
+    expect(NumberFormatter.format(0, 6, 2, "g")).toBe("0.0 Mg");
   })
 });
