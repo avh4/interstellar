@@ -4,7 +4,7 @@ var systems = require('../src/systems')
 
 describe('Game integration', function() {
   it('basic game', function() {
-    var game = new Game(systems);
+    var game = new Game(systems());
     game.p1 = new Player();
 
     game.start();
