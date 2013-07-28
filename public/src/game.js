@@ -21,9 +21,14 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
     this.groups = {};
   }
 
-  Game.prototype.start = function(layer) {
-    var width = layer.width;
-    var height = layer.height;
+  Game.prototype.start = function(baseLayer) {
+    var width = baseLayer.width;
+    var height = baseLayer.height;
+    var layer = new Kinetic.Group();
+    var topLayer = new Kinetic.Group();
+    baseLayer.add(layer);
+    baseLayer.add(topLayer);
+    topLayer.setZIndex(10);
     this.coordinateSystem = new CoordinateSystem(width, height, 18);
     var c = this.coordinateSystem;
 
@@ -45,24 +50,26 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
       var color = system.color;
       var r = c.radius(system.radius);
       var group = new Kinetic.Group({x: x, y: y});
+      console.log({x: x, y: y});
+      var topGroup = new Kinetic.Group({x: x, y: y});
       group.add(new Kinetic.Circle({radius: r, fill: color}));
-      // group.on("click", function() { player.toggleOwnership(system) });
       for (var i = 0; i < system.planets; i++) {
         group.add(new Kinetic.Circle({radius: r + 5 + 3*i, stroke: "grey"}));
       }
       group.add(group.label = new Kinetic.Text({x: -40, y: 40, width: 80, fill: "grey", align: "center"}));
       group.add(group.label2 = new Kinetic.Text({x: -40, y: 55, width: 80, fill: "grey", align: "center"}));
       group.add(group.taskLabel = new Kinetic.Text({x: -40, y: 70, width: 80, fill: playerColor(100, 88), align: "center"}));
-      group.add(group.buttons = new Kinetic.Group());
       layer.add(group);
+      topGroup.add(topGroup.buttons = new Kinetic.Group());
+      topLayer.add(topGroup);
 
       var menuSize = 200;
-      group.buttons.add(new Kinetic.Circle({radius: menuSize/2, fill: "#333", opacity: 0.4}));
-      group.buttons.add(new Kinetic.Circle({radius: menuSize/2, stroke: "white"}));
-      group.buttons.hide();
+      topGroup.buttons.add(new Kinetic.Circle({radius: menuSize/2, fill: "#333", opacity: 0.4}));
+      topGroup.buttons.add(new Kinetic.Circle({radius: menuSize/2, stroke: "white"}));
+      topGroup.buttons.hide();
 
       var stellarMiningButton = new ActionButton("Stellar Mining", playerHue, {x: 0, y: -menuSize/2, draggable: true, dragBoundFunc: ringDragBounds(menuSize/2)});
-      group.buttons.add(stellarMiningButton);
+      topGroup.buttons.add(stellarMiningButton);
 
       stellarMiningButton.on("dragmove", function() {
         var x = 400;
@@ -83,13 +90,19 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
       });
 
       th.groups[system.name] = group;
+      th.groups[system.name].topGroup = topGroup;
 
       group.on("mouseover", function() {
-        group.buttons.show();
+        topGroup.buttons.show();
+        topGroup.draw();
       });
-      group.on("mouseout", function() {
-        group.buttons.hide();
-      })
+      topGroup.on("mouseover", function() {
+        topGroup.buttons.show();
+        topGroup.draw();        
+      });
+      topGroup.on("mouseout", function() {
+        topGroup.buttons.hide();
+      });
     });
 
     // this.player.toggleOwnership(this.systems[0]);
