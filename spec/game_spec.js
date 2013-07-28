@@ -1,5 +1,5 @@
 var Game = require('../src/game');
-var ResearchOrbitalSolarCollectors = require('../src/tasks/ResearchOrbitalSolarCollectors');
+var StellarMiningResearch = require('../src/tasks/StellarMiningResearch');
 var sinon = require('sinon'); require('jasmine-sinon');
 
 describe('Game', function(){
@@ -68,7 +68,7 @@ describe('Game', function(){
       });
 
       it('should set the player\'s task at the system', function() {
-        expect(p1.setTask).toHaveBeenCalledWith('Solar System', sinon.match.instanceOf(ResearchOrbitalSolarCollectors));
+        expect(p1.setTask).toHaveBeenCalledWith('Solar System', sinon.match.instanceOf(StellarMiningResearch));
       });
     });
   });

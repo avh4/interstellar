@@ -1,6 +1,6 @@
 var uuid = require("node-uuid");
 var EnergyDistributer = require('../src/energy_distributer');
-var ResearchOrbitalSolarCollectors = require('../src/tasks/ResearchOrbitalSolarCollectors');
+var StellarMiningResearch = require('../src/tasks/StellarMiningResearch');
 
 module.exports = function(systems) {
   this.uid = uuid.v1();
@@ -39,7 +39,7 @@ module.exports.prototype.step = function(Δtime_years_e9) {
 }
 
 module.exports.prototype.playerAction = function(role, action) {
-  this.p1.setTask(action.system, new ResearchOrbitalSolarCollectors());
+  this.p1.setTask(action.system, new StellarMiningResearch());
 }
 
 module.exports.prototype.toClient = function() {

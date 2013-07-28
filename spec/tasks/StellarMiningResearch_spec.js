@@ -1,11 +1,11 @@
-var ResearchOrbitalSolarCollectors = require('../../src/tasks/ResearchOrbitalSolarCollectors');
+var StellarMiningResearch = require('../../src/tasks/StellarMiningResearch');
 var sinon = require('sinon');
 
-describe('ResearchOrbitalSolarCollectors', function() {
+describe('StellarMiningResearch', function() {
   var subject;
 
   beforeEach(function() {
-    subject = new ResearchOrbitalSolarCollectors();
+    subject = new StellarMiningResearch();
   });
 
   it('should have a description', function() {

@@ -40,7 +40,7 @@ module.exports.prototype.receiveEnergy = function(energy_J_e41) {
 }
 
 module.exports.prototype.toString = function() {
-  return '[ResearchOrbitalSolarCollectors]';
+  return '[StellarMiningResearch]';
 }
 
 module.exports.prototype.toClient = function() {
