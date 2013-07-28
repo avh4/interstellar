@@ -31,3 +31,11 @@ module.exports.prototype.taskFor = function(systemName) {
   }
   return this.tasks[systemName];
 }
+
+module.exports.prototype.abilitiesFor = function(systemName) {
+  return { capture_pernano: 1.411 };
+}
+
+module.exports.prototype.toString = function() {
+  return '[Player]';
+}

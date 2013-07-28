@@ -1,5 +1,4 @@
 var uuid = require("node-uuid");
-var PlanetaryColony = require('../src/planetary_colony');
 var EnergyDistributer = require('../src/energy_distributer');
 var ResearchOrbitalSolarCollectors = require('../src/tasks/ResearchOrbitalSolarCollectors');
 
@@ -22,11 +21,11 @@ module.exports.prototype.start = function() {
         player.currentCapture_W_e26 += v;
         player[s].currentCapture_W_e26 += v;
       },
-      function(s, v) { player.taskFor(s).receiveEnergy(v) }
+      function(s, v) { player.taskFor(s).receiveEnergy(v) },
+      function(s) { return player.abilitiesFor(s) }
       );
     system.addListener(distributer);
   }
-  distributer.addComponent(new PlanetaryColony(player));
 }
 
 module.exports.prototype.step = function(Δtime_years_e9) {
