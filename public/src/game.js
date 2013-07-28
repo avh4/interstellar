@@ -35,6 +35,7 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
       }
       group.add(group.label = new Kinetic.Text({x: -40, y: 40, width: 80, fill: "grey", align: "center"}));
       group.add(group.label2 = new Kinetic.Text({x: -40, y: 55, width: 80, fill: "grey", align: "center"}));
+      group.add(group.taskLabel = new Kinetic.Text({x: -40, y: 70, width: 80, fill: "#ffc2c2", align: "center"}));
       group.add(group.buttons = new Kinetic.Group());
       layer.add(group);
       th.groups[system.name] = group;
@@ -51,11 +52,17 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
     var as = 0.000277777778 / 180 * Math.PI;
     var years = Math.round(100*(this.model.time_years_e9*1000)) / 100;
     this.timeLabel.setText(years + " million years have passed");
+    var role = 'p1';
+    var player = this.model[role];
     this.model.systems.forEach(function(system) {
     //   system.coordinate.ra += system.rad * as * step;
     //   system.e.setPosition(c.x(system), c.y(system));
-      th.groups[system.name].label.setText(NumberFormatter.format(system.mass_g_e33, 33, 5, "g"));
-      th.groups[system.name].label2.setText(NumberFormatter.format(system.output_W_e26, 26, 3, "W"));
+      var group = th.groups[system.name];
+      group.label.setText(NumberFormatter.format(system.mass_g_e33, 33, 5, "g"));
+      group.label2.setText(NumberFormatter.format(system.output_W_e26, 26, 3, "W"));
+      if (!!player.tasks[system.name]) {
+        group.taskLabel.setText(player.tasks[system.name].description);
+      }
 
       if (system.name == "Solar System") {
         th.groups[system.name].buttons.removeChildren();
