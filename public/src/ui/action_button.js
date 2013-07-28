@@ -11,12 +11,11 @@ define([], function() {
     var frame, background, text;
     this.add(background = new Kinetic.Circle({
       radius: buttonSize/2,
-      fill: "#333",
-      opacity: 0.7
+      fill: hsl(hue, 50, 40)
     }));
     this.add(frame = new Kinetic.Circle({
       radius: buttonSize/2,
-      stroke: "white",
+      stroke: hsl(hue, 100, 50),
       strokeWidth: 3
     }));
     this.add(text = new Kinetic.Text({
@@ -35,17 +34,13 @@ define([], function() {
     }))
 
     this.on("mouseover", function() {
-      frame.setStroke("white");
-      background.setOpacity(1);
+      frame.setStroke(hsl(hue, 100, 95));
       background.setFill(hsl(hue, 90, 80));
-      this.draw();
     });
 
     this.on("mouseout", function() {
       frame.setStroke(hsl(hue, 100, 50));
-      background.setOpacity(0.7);
-      background.setFill("#333");
-      this.draw();
+      background.setFill(hsl(hue, 50, 40));
     });
   }
 

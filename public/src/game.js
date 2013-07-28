@@ -47,10 +47,8 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
       group.add(group.label2 = new Kinetic.Text({x: -40, y: 55, width: 80, fill: "grey", align: "center"}));
       group.add(group.taskLabel = new Kinetic.Text({x: -40, y: 70, width: 80, fill: playerColor(100, 88), align: "center"}));
       layer.add(group);
-      var percentages = { stellarMining: 0.5 };
       topGroup.add(new PercentageMenu(x, y, playerHue,
-        percentages,
-        function() {
+        function(percentages) {
           th.actions.changePercentages(system, percentages);
         }));
       topLayer.add(topGroup);
