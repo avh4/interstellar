@@ -29,17 +29,4 @@ describe('Planetary Colony', function() {
       expect(result).toBe(luminosity_W_e26 * capture_pernano / 1000000000);
     });
   });
-
-  describe('recieving energy', function() {
-    var result;
-    var energy_W_e26 = luminosity_W_e26 * capture_pernano / 1000000000;
-
-    beforeEach(function() {
-      result = subject.receiveEnergy(energy_W_e26, Δtime_seconds_e15);
-    });
-
-    it('should consume the remaining energy', function() {
-      expect(result).toBe(energy_W_e26);
-    });
-  });
 });
