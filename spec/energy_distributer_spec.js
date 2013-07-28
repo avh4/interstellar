@@ -31,7 +31,7 @@ describe('EnergyDistributer', function() {
       });
 
       it('should capture and distribute energy', function() {
-        expect(task.receiveEnergy).toHaveBeenCalledWith(350);
+        expect(task.receiveEnergy).toHaveBeenCalledWith(350 * Δtime_seconds_e15);
       });
 
       it('should increase the player\'s harnessed energy total', function() {
@@ -58,7 +58,7 @@ describe('EnergyDistributer', function() {
 
       it('should capture and distribute energy', function() {
         subject.systemRadiatedEnergy(systemName, luminosity_W_e26, Δtime_seconds_e15);
-        expect(task.receiveEnergy).toHaveBeenCalledWith(550);
+        expect(task.receiveEnergy).toHaveBeenCalledWith(550 * Δtime_seconds_e15);
       });
     });
   });

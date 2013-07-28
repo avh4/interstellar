@@ -76,8 +76,13 @@ function(CoordinateSystem, Player, NumberFormatter, ActionButton) {
       var group = th.groups[system.name];
       group.label.setText(NumberFormatter.format(system.mass_g_e33, 33, 5, "g"));
       group.label2.setText(NumberFormatter.format(system.output_W_e26, 26, 3, "W"));
-      if (!!player.tasks[system.name]) {
-        group.taskLabel.setText(player.tasks[system.name].description);
+      var task = player.tasks[system.name];
+      if (!!task) {
+        var text = task.description;
+        if (!!task.progress) {
+          text += " (" + (task.progress * 100).toFixed(1) + "%)";
+        }
+        group.taskLabel.setText(text);
       }
     });
 
