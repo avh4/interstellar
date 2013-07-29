@@ -8,11 +8,16 @@ module.exports = function() {
   this.currentCapture_W_e26 = 0;
   this.abilities = {};
   this.distributers = {};
+  this.colonizedSystems = {};
+}
+
+module.exports.prototype.colonizeSystem = function(systemName) {
+  this.colonizedSystems[systemName] = 1;
 }
 
 module.exports.prototype.toClient = function() {
   var tasks = {};
-  for (var s in this.distributers) {
+  for (var s in this.colonizedSystems) {
     tasks[s] = this.getDistributer(s).toClient();
   }
   return {

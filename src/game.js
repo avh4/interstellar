@@ -8,6 +8,7 @@ module.exports = function(systems) {
 module.exports.prototype.start = function(p1, p2, p3) {
   this.time_years_e9 = 0;
   this.initializePlayer('p1', p1);
+  p1.colonizeSystem(this.systems[0].name);
 }
 
 module.exports.prototype.initializePlayer = function(role, player) {
