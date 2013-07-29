@@ -1,6 +1,6 @@
 define(['coordinate_system', 'player', 'number_formatter', 'ui/percentage_menu', 'ui/SystemInfo'],
 function(CoordinateSystem, Player, NumberFormatter, PercentageMenu, SystemInfo) {
-  var playerHue = 0;
+  var playerHue = 225;
   function playerColor(saturation, lightness) {
     return 'hsl(' + playerHue + ',' + saturation + '%,' + + lightness + '%)';
   }
@@ -20,6 +20,14 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu, SystemInfo) 
     baseLayer.add(topLayer);
     this.coordinateSystem = new CoordinateSystem(width, height, 18);
     var c = this.coordinateSystem;
+    
+    bottomLayer.setOffset(400, 300);
+    bottomLayer.setPosition(400, 300);
+    ownershipAnimation = new Kinetic.Animation(function(frame) {
+      bottomLayer.setOpacity(0.8 + 0.2 * Math.sin(frame.time * 2 * Math.PI / 3000));
+      bottomLayer.setScale(1 + 0.01 * Math.sin(frame.time * 2 * Math.PI / 2000));
+    }, baseLayer);
+    ownershipAnimation.start();
     
     // baseLayer.add(new Kinetic.Rect({x: 0, y: 0, width: width, height: height, fill: "black"}));
     this.timeLabel = new Kinetic.Text({x: 20, y: height - 20, fill: "white"});
@@ -64,7 +72,7 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu, SystemInfo) 
       var color = system.color;
       var r = c.radius(system.radius);
       
-      bottomLayer.add(ownership = new Kinetic.Circle({x: x, y: y, radius: 16*r, fill: playerColor(70, 20)}));
+      bottomLayer.add(ownership = new Kinetic.Circle({x: x, y: y, radius: 16*r, fill: playerColor(20, 30)}));
       ownership.hide();
 
       var group = new Kinetic.Group({x: x, y: y});
@@ -78,6 +86,7 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu, SystemInfo) 
       group.add(group.label = new Kinetic.Text({x: -40+dx, y: 15+dy, width: 80, fill: "grey", align: "center"}));
       group.add(group.label2 = new Kinetic.Text({x: -40+dx, y: 30+dy, width: 80, fill: "grey", align: "center"}));
       layer.add(group);
+      topGroup.add(new Kinetic.Circle({radius: 600, fill: "#000", opacity: 0.5, drawHitFunc: function() {}}));
       topGroup.add(menu = new PercentageMenu(x, y, system, playerHue,
         function(percentages) {
           th.actions.changePercentages(system, percentages);
@@ -121,13 +130,16 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu, SystemInfo) 
           scaleX: 1,
           scaleY: 1
         }).play();
+        ownershipAnimation.stop();
       }}());
       topGroup.on("mouseover", function() {
         topGroup.show();
         topGroup.moveToTop();
+        ownershipAnimation.stop();
       });
       topGroup.on("mouseout", function() {
         topGroup.hide();
+        ownershipAnimation.start();
       });
     });
 

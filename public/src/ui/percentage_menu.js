@@ -38,7 +38,20 @@ define(['ui/action_button'], function(ActionButton) {
     var startingPercent = {};
     this.buttons = buttons;
     
+    var currentDrag;
+    
     var updatePercent = function() {
+      var n = _.size(tasks);
+      var total = 0;
+      for (var task in tasks) {
+        total += percentages[task];
+      }
+      var overage = Math.max(0, total - 1);
+      var overagePerTask = overage / (n - 1);
+      for (var task in tasks) {
+        if (task == currentDrag) continue;
+        percentages[task] = Math.max(0, percentages[task] - overagePerTask);
+      }
       var startPercent = 0;
       for(var task in tasks) {
         var percent = percentages[task];
@@ -67,12 +80,14 @@ define(['ui/action_button'], function(ActionButton) {
       th.add(buttons[task]);
 
       buttons[task].on("dragstart", function() {
+        currentDrag = task;
       });
       buttons[task].on("dragmove", function() {
         var dx = buttons[task].attrs.x;
         var dy = buttons[task].attrs.y;
         var radians = Math.atan2(dx, dy);
         var percent = .5 - radians / (2*Math.PI) - startingPercent[task];
+        if (percent < 0) percent += 1;
         percentages[task] = percent;
         updatePercent();
       });
