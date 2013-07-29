@@ -25,29 +25,18 @@ function(domReady, Game, Title, WaitingForPlayers, GameManager) {
   }
 
   domReady(function() {
-    if (!createjs.Sound.initializeDefaultPlugins()) {
-        document.getElementById("error").style.display = "block";
-        document.getElementById("content").style.display = "none";
-        return;
-    }
+    soundManager.setup({
+      url: '/swf',
+      preferFlash: false,
+      onready: function() {
+        soundManager.createSound({id:'title',url:'/assets/title.mp3', volume: 50});
+        soundManager.play('title', {loops: 9999999});
+      }
+    });
     
-    var assetsPath = "assets/";
-    manifest = [
-      { id:"title", src:"title.mp3|title.ogg"}
-    ];
-
-    preload = new createjs.LoadQueue();
-    preload.installPlugin(createjs.Sound);
-    preload.addEventListener("complete", function() {
-      createjs.Sound.play("title", {interrupt:createjs.Sound.INTERRUPT_NONE, loop:-1, volume:0.4});
-      stage = new Kinetic.Stage({container: 'container', width: 800, height: 600});
-      gm = new GameManager(game, stage);
-      title = new Title(gm);
-      container.switchTo("title");
-    });
-    preload.addEventListener("progress", function(event) {
-      console.log(event);
-    });
-    preload.loadManifest(manifest, true, assetsPath);
+    stage = new Kinetic.Stage({container: 'container', width: 800, height: 600});
+    gm = new GameManager(game, stage);
+    title = new Title(gm);
+    container.switchTo("title");
   });
 });

@@ -59,7 +59,6 @@ define(['ui/action_button'], function(ActionButton) {
 
       buttons[task].on("dragstart", function() {
       });
-      console.log(task);
       buttons[task].on("dragmove", function() {
         var dx = buttons[task].attrs.x;
         var dy = buttons[task].attrs.y;
