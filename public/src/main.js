@@ -30,7 +30,10 @@ function(domReady, Game, Title, WaitingForPlayers, GameManager) {
       preferFlash: false,
       onready: function() {
         soundManager.createSound({id:'title',url:'/assets/title.mp3', volume: 50});
-        soundManager.play('title', {loops: 9999999});
+        function loop() {
+          soundManager.play('title', {position: 65678, onfinish: function() { loop(); }});
+        }
+        soundManager.play('title', {onfinish: function() { loop(); }});
       }
     });
     
