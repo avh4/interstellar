@@ -114,6 +114,10 @@ function step() {
 
 jobs.process('start game', function(job, done) {
   var game = games[job.data.game];
+  if (!game) {
+    console.log("Throwing out stale game " + job.data.game);
+    return;
+  }
 
   openGames = _.without(openGames, game);
 
