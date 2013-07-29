@@ -38,7 +38,7 @@ function hmsToRadians(array) {
   return array[0] * Math.PI / 12;
 }
 
-module.exports = function(name, spectralClass, ra, dec, distance, omega, mass_MS, planets) {
+module.exports = function(name, spectralClass, ra, dec, distance, omega, mass_MS, planets, adjustLabel) {
   this._listeners = [];
   this.name = name;
   this.mass_g_e33 = mass_MS * MS_g_e33;
@@ -47,6 +47,7 @@ module.exports = function(name, spectralClass, ra, dec, distance, omega, mass_MS
   this.planets = planets;
   this.ra_radians = hmsToRadians(ra);
   this.distance = distance;
+  this.adjustLabel = adjustLabel || [0, 0];
 }
 
 module.exports.prototype.luminosity_W_e26 = function() {
@@ -76,7 +77,8 @@ module.exports.prototype.toClient = function() {
   return {
     name: this.name,
     mass_g_e33: this.mass_g_e33,
-    output_W_e26: this.output_W_e26
+    output_W_e26: this.output_W_e26,
+    adjustLabel: this.adjustLabel
   };
 }
 

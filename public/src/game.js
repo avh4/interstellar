@@ -73,8 +73,10 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu, SystemInfo) 
       for (var i = 0; i < system.planets; i++) {
         group.add(new Kinetic.Circle({radius: r + 5 + 3*i, stroke: "grey"}));
       }
-      group.add(group.label = new Kinetic.Text({x: -40, y: 40, width: 80, fill: "grey", align: "center"}));
-      group.add(group.label2 = new Kinetic.Text({x: -40, y: 55, width: 80, fill: "grey", align: "center"}));
+      var dx = system.adjustLabel[0];
+      var dy = system.adjustLabel[1];
+      group.add(group.label = new Kinetic.Text({x: -40+dx, y: 15+dy, width: 80, fill: "grey", align: "center"}));
+      group.add(group.label2 = new Kinetic.Text({x: -40+dx, y: 30+dy, width: 80, fill: "grey", align: "center"}));
       layer.add(group);
       topGroup.add(menu = new PercentageMenu(x, y, system, playerHue,
         function(percentages) {
