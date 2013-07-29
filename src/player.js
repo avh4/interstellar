@@ -28,6 +28,7 @@ module.exports.prototype.toClient = function() {
     uid: this.uid,
     harnessedEnergy_J_e41: this.harnessedEnergy_J_e41,
     currentCapture_W_e26: this.currentCapture_W_e26,
+    colonizations: this.colonizer.toClient(),
     tasks: tasks
   };
 }

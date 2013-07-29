@@ -22,8 +22,8 @@ module.exports.prototype.initializePlayer = function(role, player) {
     system.addListener(distributer);
   }
   var th = this;
-  this.colonizers[role] = new Colonizer(player, this.systems,
-    function() {return th.time_years_e9; });
+  player.colonizer = this.colonizers[role] = 
+    new Colonizer(player, this.systems, function() {return th.time_years_e9; });
 }
 
 module.exports.prototype.getDistributer = function(role, systemName) {

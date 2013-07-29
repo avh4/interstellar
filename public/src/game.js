@@ -33,6 +33,31 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
     this.label5 = new Kinetic.Text({x: 20, y: height-100, fill: "white"});
     layer.add(this.label5);
     var th = this;
+    
+    var arrowGroup = new Kinetic.Group();
+    arrowGroup.add(a1 = new Kinetic.Polygon({points: [0,0, 10,0, 20,20, 10,40, 0,40, 10,20, 0,0], fill: playerColor(80, 70)}));
+    arrowGroup.add(a2 = new Kinetic.Polygon({points: [0,0, 10,0, 20,20, 10,40, 0,40, 10,20, 0,0], fill: playerColor(80, 70), x: 30}));
+    arrowGroup.add(a3 = new Kinetic.Polygon({points: [0,0, 10,0, 20,20, 10,40, 0,40, 10,20, 0,0], fill: playerColor(80, 70), x: 60}));
+    arrowGroup.setOffset(45, 20);
+    layer.add(arrowGroup);
+    new Kinetic.Animation(function(frame) {
+      a1.setOpacity(0.8 + 0.2 * Math.sin(frame.time * 2 * Math.PI / 1000));
+      a2.setOpacity(0.8 + 0.2 * Math.sin(frame.time * 2 * Math.PI / 1000 - 2/6*Math.PI));
+      a3.setOpacity(0.8 + 0.2 * Math.sin(frame.time * 2 * Math.PI / 1000 - 4/6*Math.PI));
+    }, baseLayer).start();
+    this.arrowGroup = arrowGroup;
+    arrowGroup.hide();
+    this.positionArrowGroup = function(s1, s2) {
+      var dx = c.x(s2)-c.x(s1);
+      var dy = c.y(s2)-c.y(s1);
+      var deg = 90 - Math.atan2(dx, dy) * 180 / Math.PI;
+      arrowGroup.setRotationDeg(deg);
+      arrowGroup.setPosition((c.x(s2) + c.x(s1))/2, (c.y(s2) + c.y(s1))/2)
+      var pxs = Math.sqrt(dx*dx + dy*dy);
+      arrowGroup.setScale(.5 * pxs / 90);
+    }
+    
+    this.systemsReference = this.model.systems;
     this.model.systems.forEach(function(system) {
       var x = c.x(system);
       var y = c.y(system);
@@ -133,6 +158,15 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
         }
       }
     });
+    
+    if (!!player.colonizations.target) {
+      var s1 = this.systemsReference[0];
+      var s2 = _.findWhere(this.systemsReference, {name: player.colonizations.target});
+      this.positionArrowGroup(s1, s2);
+      this.arrowGroup.show();
+    } else {
+      this.arrowGroup.hide();
+    }
 
     this.consumedEnergyLabel.setText("Your civilization has expended " + NumberFormatter.format(this.model.p1.harnessedEnergy_J_e41, 41, 3, "J") + " in its entire history");
     this.currentCaptureLabel.setText("Your civilzation is currently making use of " + NumberFormatter.format(this.model.p1.currentCapture_W_e26, 26, 5, "W"));

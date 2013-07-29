@@ -29,3 +29,11 @@ module.exports.prototype.step = function() {
 module.exports.prototype.toString = function() {
   return '[Colonizer]';
 }
+
+module.exports.prototype.toClient = function() {
+  if (!!this.currentTarget && this.player.abilities["Solar System"].travel_speed_c > 0) {
+    return { target: this.currentTarget.name, progress: 1-this.remaining/this.currentTarget.distance };
+  } else {
+    return {};
+  }
+}
