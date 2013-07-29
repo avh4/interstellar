@@ -12,15 +12,16 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
   Game.prototype.start = function(baseLayer) {
     var width = baseLayer.width;
     var height = baseLayer.height;
+    var bottomLayer = new Kinetic.Group();
     var layer = new Kinetic.Group();
     var topLayer = new Kinetic.Group();
+    baseLayer.add(bottomLayer);
     baseLayer.add(layer);
     baseLayer.add(topLayer);
-    topLayer.setZIndex(10);
     this.coordinateSystem = new CoordinateSystem(width, height, 18);
     var c = this.coordinateSystem;
-
-    layer.add(new Kinetic.Rect({x: 0, y: 0, width: width, height: height, fill: "black"}));
+    
+    // baseLayer.add(new Kinetic.Rect({x: 0, y: 0, width: width, height: height, fill: "black"}));
     this.timeLabel = new Kinetic.Text({x: 20, y: height - 20, fill: "white"});
     layer.add(this.timeLabel);
     this.ownedSystemsLabel = new Kinetic.Text({x: 20, y: height - 40, fill: "white"});
@@ -37,6 +38,10 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
       var y = c.y(system);
       var color = system.color;
       var r = c.radius(system.radius);
+      
+      bottomLayer.add(ownership = new Kinetic.Circle({x: x, y: y, radius: 16*r, fill: playerColor(70, 20)}));
+      ownership.hide();
+
       var group = new Kinetic.Group({x: x, y: y});
       var topGroup = new Kinetic.Group({x: x, y: y});
       group.add(new Kinetic.Circle({radius: r, fill: color}));
@@ -57,6 +62,7 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
       th.views[system.name] = {
         system: group,
         menu: menu,
+        ownership: ownership,
         labels: {
           mass: group.label,
           output: group.label2
@@ -109,6 +115,11 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
       var view = th.views[system.name];
       view.labels.mass.setText(NumberFormatter.format(system.mass_g_e33, 33, 5, "g"));
       view.labels.output.setText(NumberFormatter.format(system.output_W_e26, 26, 3, "W"));
+      if (!!player.tasks[system.name]) {
+        view.ownership.show();
+      } else {
+        view.ownership.hide();
+      }
       for (var taskName in player.tasks[system.name]) {
         var task = player.tasks[system.name][taskName];
         if (!!task) {

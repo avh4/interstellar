@@ -16,7 +16,6 @@ module.exports.prototype.step = function() {
     }
   }
   if (!this.currentTarget) {
-    console.log("Nothing to colonize");
     return;
   }
   
