@@ -32,6 +32,14 @@ define(['ui/action_button'], function(ActionButton) {
       fill: "white",
       text: system.name
     }));
+    this.add(new Kinetic.Text({
+      x: -menuSize/2, 
+      y: -menuSize/2 - 7 - 30,
+      width: menuSize,
+      align: "center",
+      fill: "#888",
+      text: "drag circles to adjust"
+    }));
     var buttons = {};
     var wedges = {};
     var tasks = percentages;
