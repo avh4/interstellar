@@ -1,7 +1,7 @@
 var stages = [
   { description: "Developing Terrestrial Travel",
     energy_J_e41: 0,
-    abilities: { } },
+    abilities: { travel_speed_c: 0 } },
   { description: "Developing Chemical Thrusters",
     energy_J_e41: 0.00000001,
     abilities: { } },
@@ -16,13 +16,13 @@ var stages = [
     abilities: { } },
   { description: "Developing Interstellar Travel",
     energy_J_e41: 0.000001,
-    abilities: { } },
+    abilities: { travel_speed_c: 0.1 } },
   { description: "Developing Fission Thrusters",
     energy_J_e41: 0.00001,
-    abilities: { } },
+    abilities: { travel_speed_c: 0.4 } },
   { description: "Developing Beamed Propulsion",
     energy_J_e41: 0.0001,
-    abilities: { } },
+    abilities: { travel_speed_c: 0.8 } },
   { description: "Perfecting Interstellar Travel" }
 ];
 

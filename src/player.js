@@ -15,6 +15,10 @@ module.exports.prototype.colonizeSystem = function(systemName) {
   this.colonizedSystems[systemName] = 1;
 }
 
+module.exports.prototype.hasColonized = function(systemName) {
+  return !!this.colonizedSystems[systemName];
+}
+
 module.exports.prototype.toClient = function() {
   var tasks = {};
   for (var s in this.colonizedSystems) {
