@@ -18,12 +18,20 @@ define(['ui/action_button'], function(ActionButton) {
     };
   }
 
-  function PercentageMenu(x, y, playerHue, updateFn) {
+  function PercentageMenu(x, y, system, playerHue, updateFn) {
     var percentages = { travel: 0, planetaryMining: 0, stellarMining: 0 };
     Kinetic.Group.call(this);
     var menuSize = 200;
     this.add(new Kinetic.Circle({radius: menuSize/2, fill: "#333", opacity: 0.6}));
     this.add(new Kinetic.Circle({radius: menuSize/2, stroke: "white"}));
+    this.add(new Kinetic.Text({
+      x: -menuSize/2, 
+      y: -7,
+      width: menuSize,
+      align: "center",
+      fill: "white",
+      text: system.name
+    }));
     var buttons = {};
     var wedges = {};
     var tasks = percentages;

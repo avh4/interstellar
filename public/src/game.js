@@ -1,5 +1,5 @@
-define(['coordinate_system', 'player', 'number_formatter', 'ui/percentage_menu'],
-function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
+define(['coordinate_system', 'player', 'number_formatter', 'ui/percentage_menu', 'ui/SystemInfo'],
+function(CoordinateSystem, Player, NumberFormatter, PercentageMenu, SystemInfo) {
   var playerHue = 0;
   function playerColor(saturation, lightness) {
     return 'hsl(' + playerHue + ',' + saturation + '%,' + + lightness + '%)';
@@ -76,10 +76,11 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
       group.add(group.label = new Kinetic.Text({x: -40, y: 40, width: 80, fill: "grey", align: "center"}));
       group.add(group.label2 = new Kinetic.Text({x: -40, y: 55, width: 80, fill: "grey", align: "center"}));
       layer.add(group);
-      topGroup.add(menu = new PercentageMenu(x, y, playerHue,
+      topGroup.add(menu = new PercentageMenu(x, y, system, playerHue,
         function(percentages) {
           th.actions.changePercentages(system, percentages);
         }));
+      topGroup.add(noMenu = new SystemInfo(x, y, system));
       topLayer.add(topGroup);
 
       topGroup.hide();
@@ -95,22 +96,30 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
       };
 
       group.on("mouseover", function() {
+        var m = menu;
+        var nm = noMenu;
+        return function() {
         var role = 'p1';
         var player = th.model[role];
         if (!!player.tasks[system.name]) {
-          topGroup.setOpacity(0);
-          topGroup.setScale(.9, .9);
-          topGroup.show();
-          topGroup.moveToTop();
-          new Kinetic.Tween({
-            node: topGroup,
-            duration: .3, easing: Kinetic.Easings.EaseOut,
-            opacity: 1,
-            scaleX: 1,
-            scaleY: 1
-          }).play();
+          m.show();
+          nm.hide();
+        } else {
+          m.hide();
+          nm.show();
         }
-      });
+        topGroup.setOpacity(0);
+        topGroup.setScale(.9, .9);
+        topGroup.show();
+        topGroup.moveToTop();
+        new Kinetic.Tween({
+          node: topGroup,
+          duration: .3, easing: Kinetic.Easings.EaseOut,
+          opacity: 1,
+          scaleX: 1,
+          scaleY: 1
+        }).play();
+      }}());
       topGroup.on("mouseover", function() {
         topGroup.show();
         topGroup.moveToTop();
