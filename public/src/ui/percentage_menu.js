@@ -28,6 +28,7 @@ define(['ui/action_button'], function(ActionButton) {
     var wedges = {};
     var tasks = percentages;
     var startingPercent = {};
+    this.buttons = buttons;
     
     var updatePercent = function() {
       var startPercent = 0;

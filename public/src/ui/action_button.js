@@ -20,10 +20,16 @@ define([], function() {
     }));
     this.add(text = new Kinetic.Text({
       x: buttonSize/2 + 4,
-      y: -7,
+      y: -7-7,
       align: "left",
       fill: "white",
       text: title
+    }));
+    this.add(this.detailText = new Kinetic.Text({
+      x: buttonSize/2 + 4,
+      y: -7+7,
+      align: "left",
+      fill: "#999"
     }));
     this.add(this.inner = inner = new Kinetic.Text({
       x: -buttonSize/2,
@@ -31,7 +37,7 @@ define([], function() {
       width: buttonSize,
       align: "center",
       fill: "#333"
-    }))
+    }));
 
     this.on("mouseover", function() {
       frame.setStroke(hsl(hue, 100, 95));

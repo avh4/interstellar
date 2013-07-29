@@ -13,7 +13,7 @@ module.exports = function() {
 module.exports.prototype.toClient = function() {
   var tasks = {};
   for (var s in this.distributers) {
-    tasks[s] = this.getDistributer(s).tasks.stellarMining.toClient();
+    tasks[s] = this.getDistributer(s).toClient();
   }
   return {
     uid: this.uid,

@@ -6,7 +6,7 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
   }
 
   function Game() {
-    this.groups = {};
+    this.views = {};
   }
 
   Game.prototype.start = function(baseLayer) {
@@ -45,9 +45,8 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
       }
       group.add(group.label = new Kinetic.Text({x: -40, y: 40, width: 80, fill: "grey", align: "center"}));
       group.add(group.label2 = new Kinetic.Text({x: -40, y: 55, width: 80, fill: "grey", align: "center"}));
-      group.add(group.taskLabel = new Kinetic.Text({x: -40, y: 70, width: 80, fill: playerColor(100, 88), align: "center"}));
       layer.add(group);
-      topGroup.add(new PercentageMenu(x, y, playerHue,
+      topGroup.add(menu = new PercentageMenu(x, y, playerHue,
         function(percentages) {
           th.actions.changePercentages(system, percentages);
         }));
@@ -55,8 +54,14 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
 
       topGroup.hide();
 
-      th.groups[system.name] = group;
-      th.groups[system.name].topGroup = topGroup;
+      th.views[system.name] = {
+        system: group,
+        menu: menu,
+        labels: {
+          mass: group.label,
+          output: group.label2
+        }
+      };
 
       group.on("mouseover", function() {
         topGroup.setOpacity(0);
@@ -97,24 +102,22 @@ function(CoordinateSystem, Player, NumberFormatter, PercentageMenu) {
     this.model.systems.forEach(function(system) {
     //   system.coordinate.ra += system.rad * as * step;
     //   system.e.setPosition(c.x(system), c.y(system));
-      var group = th.groups[system.name];
-      group.label.setText(NumberFormatter.format(system.mass_g_e33, 33, 5, "g"));
-      group.label2.setText(NumberFormatter.format(system.output_W_e26, 26, 3, "W"));
-      var task = player.tasks[system.name];
-      if (!!task) {
-        var text = task.description;
-        if (!!task.progress) {
-          text += " (" + (task.progress * 100).toFixed(1) + "%)";
+      var view = th.views[system.name];
+      view.labels.mass.setText(NumberFormatter.format(system.mass_g_e33, 33, 5, "g"));
+      view.labels.output.setText(NumberFormatter.format(system.output_W_e26, 26, 3, "W"));
+      for (var taskName in player.tasks[system.name]) {
+        var task = player.tasks[system.name][taskName];
+        if (!!task) {
+          var text = task.description;
+          if (!!task.progress) {
+            text += " (" + (task.progress * 100).toFixed(1) + "%)";
+          }
+          view.menu.buttons[taskName].detailText.setText(text);
+        } else {
+          view.menu.buttons[taskName].detailText.setText("");
         }
-        group.taskLabel.setText(text);
       }
     });
-
-    // var ownedSystems = _.map(this.player.ownedSystems, function(s) {
-    //   var e = Math.round(100 * s.energy) / 100;
-    //   return s.name + "(" + e + ")"
-    //   });
-    // this.ownedSystemsLabel.setText(ownedSystems.join(", "));
 
     this.consumedEnergyLabel.setText("Your civilization has expended " + NumberFormatter.format(this.model.p1.harnessedEnergy_J_e41, 41, 3, "J") + " in its entire history");
     this.currentCaptureLabel.setText("Your civilzation is currently making use of " + NumberFormatter.format(this.model.p1.currentCapture_W_e26, 26, 5, "W"));
